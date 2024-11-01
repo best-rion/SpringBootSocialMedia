@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Post</title>
+</head>
+<body>
+	<a th:href="@{/friends}">Find Friends</a>
+	<br>
+	<a th:href="@{/}">Home</a>
+	
+    <h2><u>Make Post</u></h2>
+	
+	<form th:action="@{/post}" th:object="${post}" method="post">
+		<p>title:</p>
+        <input type="text" name="title"><br><br>
+		<p>Content:</p>
+        <textarea type="text" name="content"></textarea><br><br>
+		
+        <input type="submit" value="Post">
+    </form>
+
+</body>
+</html>

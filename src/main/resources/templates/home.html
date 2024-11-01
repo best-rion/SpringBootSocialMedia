@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+</head>
+<body>
+	<a th:href="@{/friends}">Find Friends</a>
+	<br>
+	<a th:href="@{/post}">Make Post</a>
+	
+    <h2><u>My Posts</u></h2>
+	<br><br>
+	
+	<div th:each="post: ${posts}">
+        <h3 th:text="${post.title}"></h3>
+		<small th:text="${post.time}"></small>
+		<h6 th:text="${post.author.name}"></h6>
+		
+		<p style="white-space: pre-line" th:text="${post.content}"></p>
+		
+		<br><br>
+
+    </div>
+	
+</body>
+</html>
