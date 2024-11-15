@@ -3,18 +3,143 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" th:href="@{/css/nav.css}">
     <title>Find Friends</title>
+
+	<style>
+		.nav-link
+		{
+			margin: 0px 10px;
+		}
+	</style>
 </head>
 <body>
-	<a th:href="@{/}">Home</a>
-    <h2><u>People you may know</u></h2>
 	
-	<div th:each="user: ${users}">
-        <h3 th:text="${user.name}"></h3>
-		<button>Add Friend</b>		
-		<br><br>
+	<nav>
+		<a class="nav-item" th:href="@{/}">Home</a>
+		<a class="nav-item" th:href="@{/profile/}+${principal.name}">Profile</a>
+		<a class="nav-item" th:href="@{/post}">Make Post</a>
+		<a class="nav-item" th:href="@{/logout}">Logout</a>
+	</nav>
+	
+	
+	<div class="container">
 
-    </div>
+		<h2><u>Friends</u></h2>
+	
+		<div th:each="friend: ${friends}">
+		    <a th:href="@{/profile/}+${friend.username}"><h3 th:text="${friend.name}"></h3></a>	
+			<br>
+		</div>
+		
+		<h2><u>Friend Requests</u></h2>
+	
+		<div th:each="user: ${received_requests}">
+		    <h3 th:text="${user.name}"></h3>
+			<button th:onclick="'acceptRequest('+${user.id}+')'" th:id="'accept'+${user.id}">Accept</button>
+			<button th:onclick="'deleteRequest('+${user.id}+')'" th:id="'delete'+${user.id}">Delete</button>		
+			<br><br>
+		</div>
+		
+	    <h2><u>People you may know</u></h2>
+		
+		<div th:each="user: ${users}">
+	        <h3 th:text="${user.name}"></h3>
+			<button th:onclick="'sendRequest('+${user.id}+')'" th:id="'send'+${user.id}">Add Friend</button>
+			<button th:onclick="'cancelRequest('+${user.id}+')'" th:id="'cancel'+${user.id}" style="display: none;">Cancel Request</button>		
+			<br><br>
+	    </div>
+		
+	</div>
+	
+	<script>
+		
+		function sendRequest(id)
+		{
+			fetch
+			(
+				"http://localhost:8080/sendRequest",
+				{
+			        method: 'PUT',
+			        headers: {'Content-Type': 'text/plain'},
+			        body: id
+		    	}
+			)
+			.then(response=>response.text())
+			.then(body=>{
+				if (body === "1")
+				{
+					console.log("sent request to "+id)
+					document.getElementById("cancel"+id).style.display = "block";
+					document.getElementById("send"+id).style.display = "none";
+				}
+			})
+		}
+		
+		function cancelRequest(id)
+		{
+			fetch
+			(
+				"http://localhost:8080/cancelRequest",
+				{
+			        method: 'PUT',
+			        headers: {'Content-Type': 'text/plain'},
+			        body: id
+		    	}
+			)
+			.then(response=>response.text())
+			.then(body=>{
+				if (body === "1")
+				{
+					document.getElementById("send"+id).style.display = "block";
+					document.getElementById("cancel"+id).style.display = "none";
+				}
+			})
+		}
+		
+		function acceptRequest(id)
+		{
+			fetch
+			(
+				"http://localhost:8080/acceptRequest",
+				{
+			        method: 'PUT',
+			        headers: {'Content-Type': 'text/plain'},
+			        body: id
+		    	}
+			)
+			.then(response=>response.text())
+			.then(body=>{
+				if (body === "1")
+				{
+					document.getElementById("accept"+id).style.display = "none";
+					document.getElementById("delete"+id).style.display = "none";
+				}
+			})
+		}
+		
+		function deleteRequest(id)
+		{
+			fetch
+			(
+				"http://localhost:8080/deleteRequest",
+				{
+			        method: 'PUT',
+			        headers: {'Content-Type': 'text/plain'},
+			        body: id
+		    	}
+			)
+			.then(response=>response.text())
+			.then(body=>{
+				if (body === "1")
+				{
+					document.getElementById("accept"+id).style.display = "none";
+					document.getElementById("delete"+id).style.display = "none";
+				}
+			})
+		}
+		
+	</script>
 	
 </body>
 </html>

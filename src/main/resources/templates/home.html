@@ -3,26 +3,160 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" th:href="@{/css/nav.css}">
+	<link rel="stylesheet" th:href="@{/css/post.css}">
     <title>Home</title>
 </head>
-<body>
-	<a th:href="@{/friends}">Find Friends</a>
-	<br>
-	<a th:href="@{/post}">Make Post</a>
-	
-    <h2><u>My Posts</u></h2>
-	<br><br>
-	
-	<div th:each="post: ${posts}">
-        <h3 th:text="${post.title}"></h3>
-		<small th:text="${post.time}"></small>
-		<h6 th:text="${post.author.name}"></h6>
-		
-		<p style="white-space: pre-line" th:text="${post.content}"></p>
-		
-		<br><br>
 
-    </div>
+<style>
+
+	body
+	{
+		width: 100%;
+		height: 100vh;
+	}
+	
+	.profile-picture
+	{
+		height: 40px;
+		width: 40px;
+		border-radius: 50%;
+		margin: auto 0px;
+	}
+
+	.vertical-center
+	{
+		display: flex;
+	}
+	
+	.author-name
+	{
+		font-size: 20px;
+		margin: auto 5px;
+	}
+	
+	.like-btn
+	{
+		border: none;
+		background-color: transparent;
+		font-size: 18px;
+		margin: 20px auto;
+	}
+	
+</style>
+
+<body>
+	<nav>
+		<a class="nav-item" th:href="@{/profile/}+${principal.name}">Profile</a>
+		<a class="nav-item" th:href="@{/post}">Make Post</a>
+		<a class="nav-item" th:href="@{/friends}">Find Friends</a>
+		<a class="nav-item" th:href="@{/logout}">Logout</a>
+	</nav>
+	
+	<div class="container">
+
+		<h2> <u>Posts by friends</u> </h2>
+
+		<div th:each="likedPost: ${likedPosts}" class="post">
+		    <h2 class="title" th:text="${likedPost.post.title}"></h2>
+			
+			<a class="vertical-center" th:href="@{/profile/}+${likedPost.post.author.username}">
+				<img class="profile-picture" th:src="${likedPost.post.author.image_suffix != null} 
+													 ? @{/images/}+${likedPost.post.author.id}+'.'+${likedPost.post.author.image_suffix} 
+													 : @{/images/default.jpg}" alt="...">
+				 <span class="author-name" th:text="${likedPost.post.author.name}"></span> 
+			 </a>
+			 
+			<p><small th:text="${likedPost.post.time}"></small><p>
+			
+			<p style="white-space: pre-line" th:text="${likedPost.post.content}"></p>
+			
+			
+			<button class="like-btn" th:id="'like-'+${likedPost.post.id}" th:onclick="'like('+${likedPost.post.id}+')'" 
+										th:style="${likedPost.liked} ? 'display: none;' : 'display:inline;'">🩶</button>
+										
+			<button class="like-btn" th:id="'dislike-'+${likedPost.post.id}" th:onclick="'dislike('+${likedPost.post.id}+')'" 
+										th:style="${likedPost.liked} ? 'display: inline;' : 'display:none;'">❤️</button>
+										
+			<span th:id="'numOfLikes-'+${likedPost.post.id}" th:text="${likedPost.post.numOfLikes}"></span>
+			
+			<div class="comment-section">
+
+				<form th:action="@{/make-comment}" th:object="${commentForm}" class="make-comment" method="post">
+					<input class="comment-input" type="text" name="post_id" th:value="${likedPost.post.id}" hidden>
+					<input class="comment-input" type="text" name="content">
+					<button class="button" type="submit">Post</button>
+				</form>
+
+				<div class="comments">
+					<div class="comment" th:each="comment: ${likedPost.post.comments}">
+							<a class="vertical-center" th:href="@{/profile/}+${comment.author.username}">
+								<img class="profile-picture" th:src="${comment.author.image_suffix != null} 
+																	 ? @{/images/}+${comment.author.id}+'.'+${comment.author.image_suffix} 
+																	 : @{/images/default.jpg}" alt="...">
+								 <span class="author-name" th:text="${comment.author.name}"></span>
+							</a>  <p> : <span th:text="${comment.content}"></span> </p>
+
+					</div>
+					
+				</div>
+				
+			</div>
+			
+		</div>
+		
+	</div>
+	
+	<script>
+		function like(id)
+		{
+			fetch
+			(
+				"http://localhost:8080/like",
+				{
+					method: 'PUT',
+					headers: {'Content-Type': 'text/plain'},
+					body: id
+				}
+			)
+			.then(response=>response.text())
+			.then(body=>{
+				if (body=="1")
+				{
+					document.getElementById("like-"+id).style.display = "none"
+					document.getElementById("dislike-"+id).style.display = "inline"
+
+					var numOfLikes = document.getElementById("numOfLikes-"+id)
+					numOfLikes.innerHTML = ""+(parseInt(numOfLikes.innerHTML) + 1)
+				}
+			})
+		}
+				
+		function dislike(id)
+		{
+			fetch
+			(
+				"http://localhost:8080/dislike",
+				{
+					method: 'PUT',
+					headers: {'Content-Type': 'text/plain'},
+					body: id
+				}
+			)
+			.then(response=>response.text())
+			.then(body=>{
+				if (body=="1")
+				{
+					document.getElementById("like-"+id).style.display = "inline"
+					document.getElementById("dislike-"+id).style.display = "none"
+
+					var numOfLikes = document.getElementById("numOfLikes-"+id)
+					numOfLikes.innerHTML = ""+(parseInt(numOfLikes.innerHTML) - 1)
+				}
+			})
+		}
+	</script>
+	
 	
 </body>
 </html>

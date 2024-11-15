@@ -1,0 +1,21 @@
+nav
+{
+    height: 50px;
+    width: 100%;
+    background-color: aliceblue;
+    position: fixed;
+    top: 0px;
+    display: flex;
+    justify-content: center;
+}
+
+
+.nav-item
+{
+	margin: auto 10px;
+}
+
+.container
+{
+	margin-top: 100px;
+}

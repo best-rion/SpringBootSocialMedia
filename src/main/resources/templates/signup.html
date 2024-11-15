@@ -7,7 +7,7 @@
 </head>
 <body>
 	
-    <form th:action="@{/signup}" th:object="${UserForm}" method="post" onsubmit="return validateForm()">
+    <form th:action="@{/signup}" th:object="${SignupForm}" method="post" onsubmit="return validateForm()">
 		<p>Your Full Name:</p>
 		<small id="nameMessage"></small>
 		<input type="text" name="name" id="name"><br><br>
@@ -21,8 +21,11 @@
         <p>Confirm Password:</p>
         <input type="password" name="confirm_password" id="confirm_password"><br><br>
 
-        <input type="submit" value="Sign In">
+        <input type="submit" value="Sign Up">
     </form>
+
+		<br><br><br>
+		<a th:href="@{/login}">Log In</a>
 	
 	<script>
 			function validateForm() {

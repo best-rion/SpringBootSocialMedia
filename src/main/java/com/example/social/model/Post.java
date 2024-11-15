@@ -1,14 +1,17 @@
-package com.example.social;
+package com.example.social.model;
 
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 
 @Entity
 public class Post
@@ -18,11 +21,22 @@ public class Post
 	private long id;
 	private String title;
 	@ManyToOne
-	@JoinColumn(name="author_ref")
 	private User author;
 	private Date time;
 	@Column(columnDefinition="TEXT")
 	private String content;
+	@OneToMany(
+	        cascade = CascadeType.ALL,
+	        orphanRemoval = true
+	    )
+	private Set<Comment> comments;
+	private int numOfLikes;
+	
+	
+	public Post()
+	{
+		this.comments = new HashSet<>();
+	}
 	
 	
 	public long getId() {
@@ -55,5 +69,20 @@ public class Post
 	public void setAuthor(User author) {
 		this.author = author;
 	}
-	
+	public Set<Comment> getComments() {
+		return comments;
+	}
+	public void setComments(Set<Comment> comments) {
+		this.comments = comments;
+	}
+
+
+	public int getNumOfLikes() {
+		return numOfLikes;
+	}
+
+
+	public void setNumOfLikes(int numOfLikes) {
+		this.numOfLikes = numOfLikes;
+	}
 }

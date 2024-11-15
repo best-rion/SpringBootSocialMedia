@@ -1,6 +1,6 @@
-package com.example.social;
+package com.example.social.dto;
 
-public class UserForm
+public class SignupForm
 {
 	private String name;
 	private String username;

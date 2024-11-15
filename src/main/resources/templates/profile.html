@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" th:href="@{/css/nav.css}">
+	<link rel="stylesheet" th:href="@{/css/post.css}">
+    <title th:text="${profile.name}"></title>
+	<style>
+	
+		body
+		{
+			width: 100%;
+			height: 100vh;
+		}
+
+		.top
+		{
+			height: 300px;
+			width: 100%;
+			background-color: rgb(248, 247, 241);
+			display: flex;
+		}
+
+		.image
+		{
+			width: 200px;
+			height: 200px;
+			display: flex;
+			margin: auto 0px auto 50px;
+		}
+
+		.profile-picture
+		{
+			height: 170px;
+			width: 170px;
+			border-radius: 50%;
+			margin: 0px auto auto auto;
+		}
+		
+		.info
+		{
+			width: 300px;
+			height: 200px;
+			margin: auto auto auto 0px;
+		}
+		
+		.name
+		{
+			font-size: 30px;
+			margin: 0px;
+		}
+		.username
+		{
+			font-size: 18px;
+			margin: 0px;
+			color: rgb(83, 83, 83);
+		}
+
+		.description-div
+		{
+			margin-top: 30px;
+		}
+
+		.description
+		{
+			font-family: monospace;
+			font-size: 16px;
+		}
+	</style>
+</head>
+<body>
+	<nav>
+		<a class="nav-item" th:href="@{/}">Home</a>
+		<a class="nav-item" th:href="@{/profile/}+${principal.name}" th:unless="${isMyProfile}">Profile</a>
+		<a class="nav-item" th:href="@{/friends}">Find Friends</a>
+		<a class="nav-item" th:href="@{/post}">Make Post</a>
+		<a class="nav-item" th:href="@{/logout}">Logout</a>
+	</nav>
+	
+	<div class="container">
+
+		<div class="top">
+			<div class="image">
+				<img class="profile-picture" th:src="${profile.image_suffix != null} ? @{/images/}+${profile.id}+'.'+${profile.image_suffix} :  @{/images/default.jpg}" alt="...">
+			</div>
+			
+			<div class="info">
+						
+				<div th:if="${isMyProfile}">  <a th:href="@{/account}">Edit Profile</a> </div>
+				
+		        <b class="name" th:text="${profile.name}"></b>
+				
+		        <p class="username">@<span class th:text="${profile.username}"></span></p>
+				
+				<div class="description-div">
+					<p class="description" th:text="${profile.description}"></p>
+				</div>
+		    </div>
+		</div>
+		
+	    
+	
+	    <div id="posts">
+	
+	        <h2><u>Posts by <span th:text="${profile.name}"></span></u></h2>
+
+			<div th:each="post: ${posts}" class="post">
+				<h3 th:text="${post.title}"></h3>
+				<a th:href="@{/profile/}+${post.author.username}"> <h6 th:text="${post.author.name}"></h6> </a>
+				<p><small th:text="${post.time}"></small><p>
+				
+				<p style="white-space: pre-line" th:text="${post.content}"></p>
+				
+				<div class="comment-section">
+	
+					<form th:action="@{/make-comment}" th:object="${commentForm}" class="make-comment" method="post">
+						<input class="comment-input" type="text" name="post_id" th:value="${post.id}" hidden>
+						<input class="comment-input" type="text" name="content">
+						<button class="button" type="submit">Post</button>
+					</form>
+	
+					<div class="comments">
+						<div th:each="comment: ${post.comments}">
+	
+							<p> 
+								<a th:href="@{/profile/}+${comment.author.username}">
+									<b><span th:text="${comment.author.name}"></span></b> 
+								</a>
+								: <span th:text="${comment.content}"></span>
+							</p>
+	
+						</div>
+
+					</div>
+					
+				</div>
+				
+			</div>
+	
+	    </div>
+
+    </div>
+    
+
+</body>
+</html>

@@ -1,4 +1,4 @@
-package com.example.social;
+package com.example.social.configuration;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -23,18 +23,21 @@ public class SecurityConfiguration
 	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception
 	{
 		http
+			.csrf((csrf)->
+				csrf.disable()
+			)
 			.authorizeHttpRequests((auth)->
 				auth
-					.requestMatchers("/signup").permitAll()
+					.requestMatchers("/signup", "/css/**").permitAll()
 					.anyRequest().authenticated()
 			)
-			.formLogin((loginCustomizer)->
-				loginCustomizer
+			.formLogin((login)->
+				login
 					.loginPage("/login") // My custom login route
 					.permitAll()
 			)
-			.logout((logoutCustomizer)->
-				logoutCustomizer
+			.logout((logout)->
+				logout
 				//.logoutSuccessUrl("/login")
 				.permitAll()
 			);

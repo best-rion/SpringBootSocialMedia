@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" th:href="@{/css/nav.css}">
+    <title>Edit Profile</title>
+</head>
+<body>
+    <nav>
+		<a class="nav-item" th:href="@{/profile/}+${principal.name}">Profile</a>
+		<a class="nav-item" th:href="@{/post}">Make Post</a>
+		<a class="nav-item" th:href="@{/friends}">Find Friends</a>
+		<a class="nav-item" th:href="@{/logout}">Logout</a>
+	</nav>
+
+    <div class="container">
+        <form th:action="@{/account}" th:object="${form}" method="post" enctype="multipart/form-data">
+            <p>
+                Image: <input type="file" name="image">
+            </p>
+
+            <p>
+                <input type="text" name="name" th:value="${current_user.name}">
+            </p>
+
+            <p>
+                <input type="text" name="description" th:value="${current_user.description}">
+            </p>
+
+            <button class="button" type="submit">Done</button>
+        </form>
+
+
+    </div>
+
+
+</body>
+</html>

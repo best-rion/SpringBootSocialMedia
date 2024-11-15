@@ -1,18 +1,25 @@
-package com.example.social;
+package com.example.social.model;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import com.example.social.dto.SignupForm;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToMany;
 
 @Entity
 public class User implements UserDetails
@@ -29,16 +36,33 @@ public class User implements UserDetails
 	private String username;
 	private String password;
 	private String description;
+	private String image_suffix;
+
+	@OneToMany(
+	        cascade = CascadeType.ALL,
+	        orphanRemoval = true )
+	public Set<Post> posts;
+	
+	@ManyToMany
+	public Set<User> sentRequests;
+	@ManyToMany
+	public Set<User> receivedRequests;
+	@ManyToMany
+	public Set<User> friends;
+	@ManyToMany
+	private Set<Post> likedPosts;
+	// FetchType.LAZY by default
 	
 	public User() {}
 	
-	public User(UserForm form)
+	public User(SignupForm form)
 	{
 		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 		this.name = form.getName();
 		this.username = form.getUsername();
 		this.password = encoder.encode(form.getPassword());
 		this.description = "Just Signed Up";
+		this.likedPosts = new HashSet<>();
 	}
 	
 	public long getId() {
@@ -83,5 +107,21 @@ public class User implements UserDetails
 	    auth.add(new SimpleGrantedAuthority("USER"));
 		
 		return auth;
+	}
+
+	public String getImage_suffix() {
+		return image_suffix;
+	}
+
+	public void setImage_suffix(String image_suffix) {
+		this.image_suffix = image_suffix;
+	}
+	
+	public Set<Post> getLikedPosts() {
+		return likedPosts;
+	}
+
+	public void setLikedPosts(Set<Post> likedPosts) {
+		this.likedPosts = likedPosts;
 	}
 }

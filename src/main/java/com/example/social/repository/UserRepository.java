@@ -1,9 +1,11 @@
-package com.example.social;
+package com.example.social.repository;
 
 import java.util.List;
 
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
+
+import com.example.social.model.User;
 
 public interface UserRepository extends CrudRepository<User,Integer>
 {
