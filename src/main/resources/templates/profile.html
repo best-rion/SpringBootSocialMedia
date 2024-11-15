@@ -30,7 +30,7 @@
 			margin: auto 0px auto 50px;
 		}
 
-		.profile-picture
+		.big-profile-picture
 		{
 			height: 170px;
 			width: 170px;
@@ -82,7 +82,7 @@
 
 		<div class="top">
 			<div class="image">
-				<img class="profile-picture" th:src="${profile.image_suffix != null} ? @{/images/}+${profile.id}+'.'+${profile.image_suffix} :  @{/images/default.jpg}" alt="...">
+				<img class="big-profile-picture" th:src="${profile.image_suffix != null} ? @{/images/}+${profile.id}+'.'+${profile.image_suffix} :  @{/images/default.jpg}" alt="...">
 			</div>
 			
 			<div class="info">
@@ -105,33 +105,48 @@
 	
 	        <h2><u>Posts by <span th:text="${profile.name}"></span></u></h2>
 
-			<div th:each="post: ${posts}" class="post">
-				<h3 th:text="${post.title}"></h3>
-				<a th:href="@{/profile/}+${post.author.username}"> <h6 th:text="${post.author.name}"></h6> </a>
-				<p><small th:text="${post.time}"></small><p>
+			<div th:each="likedPost: ${likedPosts}" class="post">
+			    <h2 class="title" th:text="${likedPost.post.title}"></h2>
 				
-				<p style="white-space: pre-line" th:text="${post.content}"></p>
+				<a class="vertical-center" th:href="@{/profile/}+${likedPost.post.author.username}">
+					<img class="profile-picture" th:src="${likedPost.post.author.image_suffix != null} 
+														 ? @{/images/}+${likedPost.post.author.id}+'.'+${likedPost.post.author.image_suffix} 
+														 : @{/images/default.jpg}" alt="...">
+					 <span class="author-name" th:text="${likedPost.post.author.name}"></span> 
+				 </a>
+				 
+				<p><small th:text="${likedPost.post.time}"></small><p>
+				
+				<p style="white-space: pre-line" th:text="${likedPost.post.content}"></p>
+				
+				
+				<button class="like-btn" th:id="'like-'+${likedPost.post.id}" th:onclick="'like('+${likedPost.post.id}+')'" 
+											th:style="${likedPost.liked} ? 'display: none;' : 'display:inline;'">🩶</button>
+											
+				<button class="like-btn" th:id="'dislike-'+${likedPost.post.id}" th:onclick="'dislike('+${likedPost.post.id}+')'" 
+											th:style="${likedPost.liked} ? 'display: inline;' : 'display:none;'">❤️</button>
+											
+				<span th:id="'numOfLikes-'+${likedPost.post.id}" th:text="${likedPost.post.numOfLikes}"></span>
 				
 				<div class="comment-section">
-	
+
 					<form th:action="@{/make-comment}" th:object="${commentForm}" class="make-comment" method="post">
-						<input class="comment-input" type="text" name="post_id" th:value="${post.id}" hidden>
+						<input class="comment-input" type="text" name="post_id" th:value="${likedPost.post.id}" hidden>
 						<input class="comment-input" type="text" name="content">
 						<button class="button" type="submit">Post</button>
 					</form>
-	
-					<div class="comments">
-						<div th:each="comment: ${post.comments}">
-	
-							<p> 
-								<a th:href="@{/profile/}+${comment.author.username}">
-									<b><span th:text="${comment.author.name}"></span></b> 
-								</a>
-								: <span th:text="${comment.content}"></span>
-							</p>
-	
-						</div>
 
+					<div class="comments">
+						<div class="comment" th:each="comment: ${likedPost.post.comments}">
+								<a class="vertical-center" th:href="@{/profile/}+${comment.author.username}">
+									<img class="profile-picture" th:src="${comment.author.image_suffix != null} 
+																		 ? @{/images/}+${comment.author.id}+'.'+${comment.author.image_suffix} 
+																		 : @{/images/default.jpg}" alt="...">
+									 <span class="author-name" th:text="${comment.author.name}"></span>
+								</a>  <p> : <span th:text="${comment.content}"></span> </p>
+
+						</div>
+						
 					</div>
 					
 				</div>
@@ -142,6 +157,8 @@
 
     </div>
     
+
+	<script th:src="@{/js/like.js}"></script>
 
 </body>
 </html>

@@ -112,13 +112,31 @@ public class HomeController
 	@GetMapping("/profile/{username}")
 	public String profile(@PathVariable String username, Model model, Principal principal)
 	{
+		User current_user = userRepository.findByUsername( principal.getName() );
+		
 		User person = userRepository.findByUsername(username);
 		Profile profile = new Profile(person);
 		
 		List<Post> posts = postRepository.findByAuthor(person);
 		
+		
+		Set<LikedPost> likedPosts = new HashSet<>();
+		for (Post post: posts)
+		{
+			LikedPost likedPost = new LikedPost();
+			likedPost.setPost(post);
+			likedPost.setLiked(false);
+			if(current_user.getLikedPosts().contains( post ))
+			{
+				likedPost.setLiked(true);
+			}
+			likedPosts.add( likedPost );
+		}
+		
+		
+		
 		model.addAttribute("profile", profile);
-		model.addAttribute("posts", posts);
+		model.addAttribute("likedPosts", likedPosts);
 		model.addAttribute("isMyProfile", person.getUsername().equals(principal.getName()));
 		model.addAttribute("principal", principal);
 		return "profile";
@@ -144,16 +162,17 @@ public class HomeController
 	{
 		User current_user = userRepository.findByUsername(principal.getName());
 		
-		
-		String fileName = file.getOriginalFilename();
-		String suffix[] = fileName.split("\\.");
-		Path path = Paths.get(imagesFolder, Long.toString( current_user.getId() ) + "." + suffix[1]);
-		Files.write( path, file.getBytes());
-		
+		if ( !file.isEmpty() )
+		{
+			String fileName = file.getOriginalFilename();
+			String suffix[] = fileName.split("\\.");
+			Path path = Paths.get(imagesFolder, Long.toString( current_user.getId() ) + "." + suffix[1]);
+			Files.write( path, file.getBytes());
+			current_user.setImage_suffix( suffix[1] );
+		}
 		
 		current_user.setName( form.getName() );
 		current_user.setDescription( form.getDescription() );
-		current_user.setImage_suffix( suffix[1] );
 		userRepository.save( current_user );
 		
 		
