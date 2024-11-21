@@ -82,7 +82,7 @@
 
 		<div class="top">
 			<div class="image">
-				<img class="big-profile-picture" th:src="${profile.image_suffix != null} ? @{/images/}+${profile.id}+'.'+${profile.image_suffix} :  @{/images/default.jpg}" alt="...">
+				<img class="big-profile-picture" th:src="${profile.image_suffix != null} ? @{/upload/static/images/}+${profile.id}+'.'+${profile.image_suffix} :  @{/images/default.jpg}" alt="...">
 			</div>
 			
 			<div class="info">
@@ -110,7 +110,7 @@
 				
 				<a class="vertical-center" th:href="@{/profile/}+${likedPost.post.author.username}">
 					<img class="profile-picture" th:src="${likedPost.post.author.image_suffix != null} 
-														 ? @{/images/}+${likedPost.post.author.id}+'.'+${likedPost.post.author.image_suffix} 
+														 ? @{/upload/static/images/}+${likedPost.post.author.id}+'.'+${likedPost.post.author.image_suffix} 
 														 : @{/images/default.jpg}" alt="...">
 					 <span class="author-name" th:text="${likedPost.post.author.name}"></span> 
 				 </a>
@@ -140,7 +140,7 @@
 						<div class="comment" th:each="comment: ${likedPost.post.comments}">
 								<a class="vertical-center" th:href="@{/profile/}+${comment.author.username}">
 									<img class="profile-picture" th:src="${comment.author.image_suffix != null} 
-																		 ? @{/images/}+${comment.author.id}+'.'+${comment.author.image_suffix} 
+																		 ? @{/upload/static/images/}+${comment.author.id}+'.'+${comment.author.image_suffix} 
 																		 : @{/images/default.jpg}" alt="...">
 									 <span class="author-name" th:text="${comment.author.name}"></span>
 								</a>  <p> : <span th:text="${comment.content}"></span> </p>
