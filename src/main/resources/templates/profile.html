@@ -137,6 +137,11 @@
 						<p><a th:if=${likedPost.seeMore} th:href="@{/post/}+${likedPost.post.id}">...see more</a></p>
 						
 						
+							<video class="video" th:if="${likedPost.post.video}" th:src="@{/video/}+${likedPost.post.id}"
+							 width="100%" controls preload="none">
+							</video>
+						
+						
 						<button class="like-btn" th:id="'like-'+${likedPost.post.id}" th:onclick="'like('+${likedPost.post.id}+')'" 
 													th:style="${likedPost.liked} ? 'display: none;' : 'display:inline;'">🩶</button>
 													

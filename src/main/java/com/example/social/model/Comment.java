@@ -2,8 +2,6 @@ package com.example.social.model;
 
 import java.util.Date;
 
-import com.example.social.dto.LikedPost;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

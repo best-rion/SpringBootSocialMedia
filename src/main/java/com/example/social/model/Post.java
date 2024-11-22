@@ -2,9 +2,7 @@ package com.example.social.model;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -33,6 +31,8 @@ public class Post
 	    )
 	private List<Comment> comments;
 	private int numOfLikes;
+	private boolean video;
+	
 	
 	
 	public Post()
@@ -87,4 +87,15 @@ public class Post
 	public void setNumOfLikes(int numOfLikes) {
 		this.numOfLikes = numOfLikes;
 	}
+
+
+	public boolean isVideo() {
+		return video;
+	}
+
+
+	public void setVideo(boolean video) {
+		this.video = video;
+	}
+
 }

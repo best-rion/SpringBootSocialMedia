@@ -54,9 +54,13 @@
 	
 	    <h2 class="mb-5"><u>Make Post</u></h2>
 		
-		<form th:action="@{/makePost}" th:object="${post}" method="post">
-			<label>title</label><br>
+		<form th:action="@{/makePost}" th:object="${post}" method="post" enctype="multipart/form-data">
+			<label>Title</label><br>
 	        <input type="text" name="title" id="title"><br><br>
+			
+			<label>Video</label><br>
+			<input type="file" name="video_file" id ="video" multiple="multiple"><br><br>
+			
 			<label>Content</label><br>
 	        <textarea type="text" name="content" id="content"></textarea><br><br>
 			

@@ -17,6 +17,11 @@
 		height: 100vh;
 	}
 	
+	.video
+	{
+		border: 5px solid #69b4e1;
+		border-radius: 10px;
+	}
 </style>
 
 <body>
@@ -62,6 +67,11 @@
 					<p class="content" th:text="${likedPost.post.content}"></p>
 
 					<p><a th:if=${likedPost.seeMore} th:href="@{/post/}+${likedPost.post.id}">...see more</a></p>
+					
+
+						<video class="video" th:if="${likedPost.post.video}" th:src="@{/video/stream/}+${likedPost.post.id}"
+						 width="100%" controls preload="none">
+						</video>
 					
 					
 					<button class="like-btn" th:id="'like-'+${likedPost.post.id}" th:onclick="'like('+${likedPost.post.id}+')'" 
