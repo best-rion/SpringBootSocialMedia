@@ -1,7 +1,9 @@
 package com.example.social.model;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import jakarta.persistence.CascadeType;
@@ -29,13 +31,13 @@ public class Post
 	        cascade = CascadeType.ALL,
 	        orphanRemoval = true
 	    )
-	private Set<Comment> comments;
+	private List<Comment> comments;
 	private int numOfLikes;
 	
 	
 	public Post()
 	{
-		this.comments = new HashSet<>();
+		this.comments = new ArrayList<>();
 	}
 	
 	
@@ -69,10 +71,10 @@ public class Post
 	public void setAuthor(User author) {
 		this.author = author;
 	}
-	public Set<Comment> getComments() {
+	public List<Comment> getComments() {
 		return comments;
 	}
-	public void setComments(Set<Comment> comments) {
+	public void setComments(List<Comment> comments) {
 		this.comments = comments;
 	}
 

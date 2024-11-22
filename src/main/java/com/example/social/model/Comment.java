@@ -2,6 +2,8 @@ package com.example.social.model;
 
 import java.util.Date;
 
+import com.example.social.dto.LikedPost;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -10,7 +12,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 
 @Entity
-public class Comment
+public class Comment implements Comparable<Comment>
 {
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
@@ -58,5 +60,12 @@ public class Comment
 	}
 	public void setTime(Date time) {
 		this.time = time;
+	}
+
+
+	@Override
+	public int compareTo(Comment o) {
+		// TODO Auto-generated method stub
+		return getTime().compareTo(o.getTime());
 	}
 }

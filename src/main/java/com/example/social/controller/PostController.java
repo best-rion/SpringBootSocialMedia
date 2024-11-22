@@ -25,16 +25,16 @@ public class PostController
 	UserRepository userRepository;
 	
 
-	@GetMapping("/post")
-	public String postGet(Model model, Principal principal)
+	@GetMapping("/makePost")
+	public String makePostGet(Model model, Principal principal)
 	{
 		model.addAttribute("post", new Post());
 		model.addAttribute("principal", principal);
-		return "post";
+		return "makePost";
 	}
 	
 	
-	@PostMapping("/post")
+	@PostMapping("/makePost")
 	public String postPost(@ModelAttribute Post post, Principal principal)
 	{
 		User author = userRepository.findByUsername(principal.getName());

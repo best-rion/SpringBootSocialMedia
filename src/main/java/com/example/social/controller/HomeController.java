@@ -6,8 +6,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.security.Principal;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -62,10 +62,11 @@ public class HomeController
 			posts.addAll(friend.posts);
 		}
 		
-		Set<LikedPost> likedPosts = new HashSet<>();
+		List<LikedPost> likedPosts = new ArrayList<>();
 		
 		for (Post post: posts)
 		{
+			//
 			LikedPost likedPost = new LikedPost();
 			likedPost.setPost(post);
 			likedPost.setLiked(false);
@@ -74,7 +75,43 @@ public class HomeController
 				likedPost.setLiked(true);
 			}
 			likedPosts.add( likedPost );
+			
+			
+			// Make contents shorter
+			String subContent = "";
+			
+			if (post.getContent().length() > 200)
+			{
+				subContent = post.getContent().substring(0, 199);
+				
+				post.setContent( subContent );
+				
+				likedPost.setSeeMore(true);
+			}
+			
+			// Make lines shorter
+			subContent = "";
+
+			String[] lines = post.getContent().split("\r\n|\r|\n");
+			
+			if ( lines.length > 5)
+			{
+				for (int i=0; i<5; i++)
+				{
+					subContent += lines[i]+"\n";
+				}
+				
+				post.setContent( subContent );
+				
+				likedPost.setSeeMore(true);
+			}
+			
+			// Sort Comments
+			
+			Collections.sort(post.getComments());
 		}
+		
+		Collections.sort(likedPosts);
 		
 		model.addAttribute("commentForm", new CommentForm());
 		model.addAttribute("likedPosts", likedPosts);
@@ -98,7 +135,7 @@ public class HomeController
 		comment.setPost( post );
 		
 		
-		Set<Comment> comments = post.getComments();
+		List<Comment> comments = post.getComments();
 		comments.add(comment);
 		post.setComments(comments);
 		
@@ -120,7 +157,7 @@ public class HomeController
 		List<Post> posts = postRepository.findByAuthor(person);
 		
 		
-		Set<LikedPost> likedPosts = new HashSet<>();
+		List<LikedPost> likedPosts = new ArrayList<>();
 		for (Post post: posts)
 		{
 			LikedPost likedPost = new LikedPost();
@@ -131,9 +168,45 @@ public class HomeController
 				likedPost.setLiked(true);
 			}
 			likedPosts.add( likedPost );
+			
+			
+
+			
+			// Make contents shorter
+			String subContent = "";
+			
+			if (post.getContent().length() > 200)
+			{
+				subContent = post.getContent().substring(0, 199);
+				
+				post.setContent( subContent );
+				
+				likedPost.setSeeMore(true);
+			}
+			
+			// Make lines shorter
+			subContent = "";
+
+			String[] lines = post.getContent().split("\r\n|\r|\n");
+			
+			if ( lines.length > 5)
+			{
+				for (int i=0; i<5; i++)
+				{
+					subContent += lines[i]+"\n";
+				}
+				
+				post.setContent( subContent );
+				
+				likedPost.setSeeMore(true);
+			}
+			
+			// Sort Comments
+			
+			Collections.sort(post.getComments());
 		}
 		
-		
+		Collections.sort(likedPosts);
 		
 		model.addAttribute("profile", profile);
 		model.addAttribute("likedPosts", likedPosts);
@@ -178,6 +251,36 @@ public class HomeController
 		
 		return "redirect:/profile/" + principal.getName();
 	}
+	
+	
+	
+	@GetMapping("/post/{id}")
+	public String postGet(@PathVariable int id, Model model, Principal principal)
+	{
+		Post post = postRepository.findById(id);
+		
+		User current_user = userRepository.findByUsername(principal.getName());
+		
+		if (post != null)
+		{
+			LikedPost likedPost = new LikedPost();
+			likedPost.setPost(post);
+			likedPost.setLiked(false);
+			if(current_user.getLikedPosts().contains( post ))
+			{
+				likedPost.setLiked(true);
+			}
+			
+			model.addAttribute("principal", principal);
+			model.addAttribute("likedPost", likedPost);
+			return "post";
+		}
+		else
+		{
+			return "redirect:/error";
+		}
+	}
+	
 
 }
 

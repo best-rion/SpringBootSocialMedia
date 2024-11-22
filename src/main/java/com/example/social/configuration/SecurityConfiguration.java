@@ -34,6 +34,7 @@ public class SecurityConfiguration
 			.formLogin((login)->
 				login
 					.loginPage("/login") // My custom login route
+					.defaultSuccessUrl("/", true)
 					.permitAll()
 			)
 			.logout((logout)->

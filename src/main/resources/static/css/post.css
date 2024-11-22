@@ -1,15 +1,17 @@
 .post
 {
 	background-color: rgb(165, 209, 248);
-	margin: 20px;
+	margin: 40px auto;
 	padding: 20px;
+	border-radius: 10px;
 }
 
 
 .comment-section
 {
 	background-color: rgb(135, 187, 233);
-	padding: 25px;
+	padding: 5px;
+	border-radius: 5px;
 }
 
 .make-comment
@@ -20,7 +22,7 @@
 .comment-input
 {
 	padding: 10px;
-	width: 300px;
+	width: auto;
 }
 .comment
 {
@@ -30,7 +32,7 @@
 
 .button
 {
-	padding: 10px 25px;
+	padding: 5px 15px;
     margin: 10px auto;
 	background-color: rgb(44, 102, 168);
 	color: white;
@@ -38,7 +40,7 @@
 
 a
 {
-	text-decoration: none;
+	text-decoration: none !important;
 }
 
 .like
@@ -57,12 +59,14 @@ a
 .vertical-center
 {
 	display: flex;
+	margin: auto 0px;
 }
 
 .author-name
 {
-	font-size: 20px;
+	font-size: 16px;
 	margin: auto 5px;
+	font-weight: bold;
 }
 
 .like-btn
@@ -72,3 +76,33 @@ a
 	font-size: 18px;
 	margin: 20px auto;
 }
+
+.title
+{
+	margin-top: 10px;
+	font-size: 24px;
+}
+
+.time
+{
+	font-size: 12px;
+}
+
+.content
+{
+	white-space: pre-line;
+	font-size: 16px;
+}
+
+.upper
+{
+	display: flex;
+	width: auto;
+}
+
+.view-post
+{
+	margin-left: auto;
+}
+
+

@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<link rel="stylesheet" th:href="@{/css/nav.css}">
 	<link rel="stylesheet" th:href="@{/css/post.css}">
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <title>Home</title>
 </head>
 
@@ -21,61 +22,90 @@
 <body>
 	<nav>
 		<a class="nav-item" th:href="@{/profile/}+${principal.name}">Profile</a>
-		<a class="nav-item" th:href="@{/post}">Make Post</a>
+		<a class="nav-item" th:href="@{/makePost}">Make Post</a>
 		<a class="nav-item" th:href="@{/friends}">Find Friends</a>
 		<a class="nav-item" th:href="@{/logout}">Logout</a>
 	</nav>
 	
 	<div class="container">
 
-		<h2> <u>Posts by friends</u> </h2>
 
-		<div th:each="likedPost: ${likedPosts}" class="post">
-		    <h2 class="title" th:text="${likedPost.post.title}"></h2>
-			
-			<a class="vertical-center" th:href="@{/profile/}+${likedPost.post.author.username}">
-				<img class="profile-picture" th:src="${likedPost.post.author.image_suffix != null} 
-													 ? @{/upload/static/images/}+${likedPost.post.author.id}+'.'+${likedPost.post.author.image_suffix} 
-													 : @{/images/default.jpg}" alt="...">
-				 <span class="author-name" th:text="${likedPost.post.author.name}"></span> 
-			 </a>
-			 
-			<p><small th:text="${likedPost.post.time}"></small><p>
-			
-			<p style="white-space: pre-line" th:text="${likedPost.post.content}"></p>
-			
-			
-			<button class="like-btn" th:id="'like-'+${likedPost.post.id}" th:onclick="'like('+${likedPost.post.id}+')'" 
-										th:style="${likedPost.liked} ? 'display: none;' : 'display:inline;'">🩶</button>
-										
-			<button class="like-btn" th:id="'dislike-'+${likedPost.post.id}" th:onclick="'dislike('+${likedPost.post.id}+')'" 
-										th:style="${likedPost.liked} ? 'display: inline;' : 'display:none;'">❤️</button>
-										
-			<span th:id="'numOfLikes-'+${likedPost.post.id}" th:text="${likedPost.post.numOfLikes}"></span>
-			
-			<div class="comment-section">
+		<div class="row">
 
-				<form th:action="@{/make-comment}" th:object="${commentForm}" class="make-comment" method="post">
-					<input class="comment-input" type="text" name="post_id" th:value="${likedPost.post.id}" hidden>
-					<input class="comment-input" type="text" name="content">
-					<button class="button" type="submit">Post</button>
-				</form>
+			<div class="col-md-3"></div>
+			<div class="col-md-6">
 
-				<div class="comments">
-					<div class="comment" th:each="comment: ${likedPost.post.comments}">
-							<a class="vertical-center" th:href="@{/profile/}+${comment.author.username}">
-								<img class="profile-picture" th:src="${comment.author.image_suffix != null} 
-																	 ? @{/upload/static/images/}+${comment.author.id}+'.'+${comment.author.image_suffix} 
-																	 : @{/images/default.jpg}" alt="...">
-								 <span class="author-name" th:text="${comment.author.name}"></span>
-							</a>  <p> : <span th:text="${comment.content}"></span> </p>
+				<h2> <u>Posts by friends</u> </h2>
 
+				<div th:each="likedPost: ${likedPosts}" class="post">
+					
+					<div class="upper">
+									
+						<a class="vertical-center" th:href="@{/profile/}+${likedPost.post.author.username}">
+							<img class="profile-picture" th:src="${likedPost.post.author.image_suffix != null} 
+																 ? @{/upload/static/images/}+${likedPost.post.author.id}+'.'+${likedPost.post.author.image_suffix} 
+																 : @{/images/default.jpg}" alt="...">
+							 <span class="author-name" th:text="${likedPost.post.author.name}"></span> 
+						 </a>
+
+						 <a th:href="@{/post/}+${likedPost.post.id}" class="view-post vertical-center">
+							Full Post
+						 </a>
+
+					</div>
+					 
+		
+					<h4 class="title" th:text="${likedPost.post.title}"></h4>
+					 
+					<p class="time" th:text="${#dates.format(likedPost.post.time, 'dd-MMM-yyyy h:m a')}"></p>
+					
+					<p class="content" th:text="${likedPost.post.content}"></p>
+
+					<p><a th:if=${likedPost.seeMore} th:href="@{/post/}+${likedPost.post.id}">...see more</a></p>
+					
+					
+					<button class="like-btn" th:id="'like-'+${likedPost.post.id}" th:onclick="'like('+${likedPost.post.id}+')'" 
+												th:style="${likedPost.liked} ? 'display: none;' : 'display:inline;'">🩶</button>
+												
+					<button class="like-btn" th:id="'dislike-'+${likedPost.post.id}" th:onclick="'dislike('+${likedPost.post.id}+')'" 
+												th:style="${likedPost.liked} ? 'display: inline;' : 'display:none;'">❤️</button>
+												
+					<span th:id="'numOfLikes-'+${likedPost.post.id}" th:text="${likedPost.post.numOfLikes}"></span>
+					
+					<div class="comment-section">
+		
+						<form th:action="@{/make-comment}" th:object="${commentForm}" class="make-comment" method="post">
+							<input class="comment-input" type="text" name="post_id" th:value="${likedPost.post.id}" hidden>
+							<input class="comment-input" type="text" name="content">
+							<button class="button" type="submit">Post</button>
+						</form>
+		
+						<div class="comments" th:if="${#lists.size( likedPost.post.comments )}">
+							
+							<div class="comment" th:with="comment=${likedPost.post.comments[0]}">
+								<a class="vertical-center" th:href="@{/profile/}+${comment.author.username}">
+									<img class="profile-picture" th:src="${comment.author.image_suffix != null} 
+																		 ? @{/upload/static/images/}+${comment.author.id}+'.'+${comment.author.image_suffix} 
+																		 : @{/images/default.jpg}" alt="...">
+									 <span class="author-name" th:text="${comment.author.name}"></span>
+								</a>  
+								
+								<p class="content vertical-center" th:text="${comment.content}"></p>
+		
+							</div>
+							
+							<p style="font-size: 16px;"><a th:href="@{/post/}+${likedPost.post.id}" th:if="${#lists.size( likedPost.post.comments ) > 1}">more comments</a></p>
+							
+						</div>
+						
 					</div>
 					
 				</div>
-				
+	
+
 			</div>
-			
+			<div class="col-md-3"></div>
+
 		</div>
 		
 	</div>
