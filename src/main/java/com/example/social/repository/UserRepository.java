@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
-
 import com.example.social.model.User;
 
 public interface UserRepository extends CrudRepository<User,Integer>
@@ -17,4 +16,7 @@ public interface UserRepository extends CrudRepository<User,Integer>
 	public User findById(long id);
 	
 	public User findByUsername(String username);
+	
+	@Query(value = "SELECT * FROM user WHERE username <> :username", nativeQuery = true)
+	List<User> findAllExcept(String username);
 }
