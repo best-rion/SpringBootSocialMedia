@@ -29,11 +29,6 @@ public class LikeRestController
 		User current_user = userRepo.findByUsername( principal.getName() );
 		Set<Post> myLikedPosts = current_user.getLikedPosts();
 
-		
-		for (Post posta: current_user.getLikedPosts())
-		{
-			System.out.println(posta.getId());
-		}
 		Post post = postRepo.findById( Integer.parseInt( id ) );
 		
 		if (myLikedPosts.contains(post))

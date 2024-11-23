@@ -65,6 +65,13 @@ public class User implements UserDetails
 		this.likedPosts = new HashSet<>();
 	}
 	
+	
+	public boolean authorsPost( Post post )
+	{
+		return likedPosts.contains(post);
+	}
+	
+	
 	public long getId() {
 		return id;
 	}

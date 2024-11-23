@@ -12,6 +12,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 
 @Entity
 public class Post
@@ -31,13 +32,15 @@ public class Post
 	    )
 	private List<Comment> comments;
 	private int numOfLikes;
-	private boolean video;
+	@OneToOne
+	public Media media;
 	
 	
 	
 	public Post()
 	{
 		this.comments = new ArrayList<>();
+		this.media = new Media();
 	}
 	
 	
@@ -87,15 +90,5 @@ public class Post
 	public void setNumOfLikes(int numOfLikes) {
 		this.numOfLikes = numOfLikes;
 	}
-
-
-	public boolean isVideo() {
-		return video;
-	}
-
-
-	public void setVideo(boolean video) {
-		this.video = video;
-	}
-
+	
 }

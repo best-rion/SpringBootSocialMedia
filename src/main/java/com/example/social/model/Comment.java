@@ -17,8 +17,6 @@ public class Comment implements Comparable<Comment>
 	private int id;
 	@ManyToOne
 	private User author;
-	@ManyToOne
-	private Post post;
 	@Column(columnDefinition="TEXT")
 	private String content;
 	private Date time;
@@ -28,12 +26,10 @@ public class Comment implements Comparable<Comment>
 		
 	}
 	
-	
-	public Post getPost() {
-		return post;
-	}
-	public void setPost(Post post) {
-		this.post = post;
+	public Comment(String content)
+	{
+		this.content =  content;
+		this.time = new Date();
 	}
 	public int getId() {
 		return id;
