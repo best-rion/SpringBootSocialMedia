@@ -8,7 +8,6 @@ import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.util.HtmlUtils;
 
 import com.example.social.Messaging.model.Message;
 import com.example.social.Messaging.repository.MessageRepository;
@@ -28,16 +27,16 @@ public class MessageController
 	private SimpMessagingTemplate simpMessagingTemplate;
 
 	
-	@MessageMapping("/send-to/{receiver}")
+	@MessageMapping("/send-to/{friend}")
 	public void messaging(
-			@Payload ReceivedMessage receivedMessage,
-			@DestinationVariable String receiver,
+			@Payload String receivedMessage,
+			@DestinationVariable String friend,
 			final Principal principal
 			) throws Exception
 	{	
-		Message message = saveMessage.save( principal.getName(), receiver, HtmlUtils.htmlEscape(receivedMessage.getContent()) );
+		Message message = saveMessage.save( principal.getName(), friend, receivedMessage );
 	
-		simpMessagingTemplate.convertAndSendToUser( receiver , "/queue/private", message);
+		simpMessagingTemplate.convertAndSendToUser( friend , "/queue/private", message);
 
 		Thread.sleep(100); // Wait 0.1sec to update seen status in database. See "SeenController" class, how it updates.
 		

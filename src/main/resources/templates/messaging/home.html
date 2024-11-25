@@ -20,11 +20,12 @@
 
     <div class="container">
 		
-		<h2>User</h2>
+		<h2>Messages</h2>
 
 		<ul>
 		    <li th:each="notification: ${notifications}">
-		        <a th:href="@{/messaging/chat/}+${notification.sender}" th:text="${notification.sender}"></a>(💬 <span th:text="${notification.numberOfMessages}"></span>)
+		        <a th:href="@{/messaging/chat/}+${notification.sender}" th:text="${notification.sender}"></a>
+				<span th:if="${notification.numberOfMessages > 0}">💬<span th:text="${notification.numberOfMessages}"></span></span>
 		    </li>
 		</ul>
 		

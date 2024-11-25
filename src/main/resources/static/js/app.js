@@ -65,15 +65,6 @@ window.onload = () => {
 
 window.onbeforeunload = function () {
 	
-	fetch
-  	(
-  		"http://10.18.122.174:8080/offline",
-  		{
-  	        method: 'PUT',
-  	        headers: {'Content-Type': 'text/plain'}
-      	}
-  	)
-	
 	stompClient.deactivate();
 };
 
@@ -85,7 +76,7 @@ function sendMessage()
 		
 		stompClient.publish({
 		    destination: "/app/send-to/"+friend,
-		    body: JSON.stringify({'content': $("#message").val()})
+		    body: $("#message").val()
 		});
 
 		$("#message").val('');
