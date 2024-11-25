@@ -1,4 +1,4 @@
-package com.example.social.messaging.repository;
+package com.example.social.Messaging.repository;
 
 
 import java.util.List;
@@ -6,7 +6,7 @@ import java.util.List;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
-import com.example.social.messaging.model.Message;
+import com.example.social.Messaging.model.Message;
 
 
 public interface MessageRepository extends CrudRepository<Message, Integer> 

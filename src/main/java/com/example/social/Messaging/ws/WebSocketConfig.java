@@ -1,4 +1,4 @@
-package com.example.social.messaging.ws;
+package com.example.social.Messaging.ws;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;

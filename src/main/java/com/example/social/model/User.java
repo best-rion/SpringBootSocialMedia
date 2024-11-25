@@ -18,8 +18,10 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.JoinColumn;
 
 @Entity
 public class User implements UserDetails
@@ -39,8 +41,10 @@ public class User implements UserDetails
 	private String image_suffix;
 
 	@OneToMany(
+	        mappedBy = "author",
 	        cascade = CascadeType.ALL,
-	        orphanRemoval = true )
+	        orphanRemoval = true
+	    )
 	public Set<Post> posts;
 	
 	@ManyToMany
@@ -49,7 +53,10 @@ public class User implements UserDetails
 	public Set<User> receivedRequests;
 	@ManyToMany
 	public Set<User> friends;
-	@ManyToMany
+	@ManyToMany(cascade = {CascadeType.ALL})
+    @JoinTable(name="user_liked_posts", 
+    joinColumns={@JoinColumn(name="user_id")}, 
+    inverseJoinColumns={@JoinColumn(name="post_id")})
 	private Set<Post> likedPosts;
 	// FetchType.LAZY by default
 	
@@ -66,7 +73,7 @@ public class User implements UserDetails
 	}
 	
 	
-	public boolean authorsPost( Post post )
+	public boolean likedThisPost( Post post )
 	{
 		return likedPosts.contains(post);
 	}

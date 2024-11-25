@@ -19,9 +19,25 @@ const stompClient = new StompJs.Client({
 
 stompClient.onConnect = (frame) => {
     console.log('Connected: ' + frame +'End of frame');
+	
     stompClient.subscribe('/user/queue/private', (message) => {
         showMessage(JSON.parse(message.body));
     });
+	
+	stompClient.subscribe('/user/queue/update', (friend) => {
+		
+		if (friend.body == $("#friend").val())
+		{
+			var unseens = document.getElementsByClassName("unseen")
+
+			for (var i=0; i<unseens.length; i++)
+			{
+				unseens[i].innerHTML = "Seen"
+				unseens[i].style.color = "#3c763d"
+			}
+		}
+		
+	});
 };
 
 stompClient.onWebSocketError = (error) => {
@@ -48,6 +64,16 @@ window.onload = () => {
 }
 
 window.onbeforeunload = function () {
+	
+	fetch
+  	(
+  		"http://10.18.122.174:8080/offline",
+  		{
+  	        method: 'PUT',
+  	        headers: {'Content-Type': 'text/plain'}
+      	}
+  	)
+	
 	stompClient.deactivate();
 };
 

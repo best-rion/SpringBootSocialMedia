@@ -29,6 +29,7 @@
 		<a class="nav-item" th:href="@{/}">Home</a>
 		<a class="nav-item" th:href="@{/profile/}+${principal.name}">Profile</a>
 		<a class="nav-item" th:href="@{/makePost}">Make Post</a>
+		<a class="nav-item" th:href="@{/messaging}">Message</a>
 		<a class="nav-item" th:href="@{/logout}">Logout</a>
 	</nav>
 	
@@ -103,7 +104,7 @@
 		{
 			fetch
 			(
-				"http://localhost:8080/sendRequest",
+				"http://10.18.122.174:8080/sendRequest",
 				{
 			        method: 'PUT',
 			        headers: {'Content-Type': 'text/plain'},
@@ -125,7 +126,7 @@
 		{
 			fetch
 			(
-				"http://localhost:8080/cancelRequest",
+				"http://10.18.122.174:8080/cancelRequest",
 				{
 			        method: 'PUT',
 			        headers: {'Content-Type': 'text/plain'},
@@ -146,7 +147,7 @@
 		{
 			fetch
 			(
-				"http://localhost:8080/acceptRequest",
+				"http://10.18.122.174:8080/acceptRequest",
 				{
 			        method: 'PUT',
 			        headers: {'Content-Type': 'text/plain'},
@@ -167,7 +168,7 @@
 		{
 			fetch
 			(
-				"http://localhost:8080/deleteRequest",
+				"http://10.18.122.174:8080/deleteRequest",
 				{
 			        method: 'PUT',
 			        headers: {'Content-Type': 'text/plain'},

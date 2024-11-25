@@ -2,7 +2,7 @@ function like(id)
 {
 	fetch
 	(
-		"http://localhost:8080/like",
+		"http://10.18.122.174:8080/like",
 		{
 			method: 'PUT',
 			headers: {'Content-Type': 'text/plain'},
@@ -26,7 +26,7 @@ function dislike(id)
 {
 	fetch
 	(
-		"http://localhost:8080/dislike",
+		"http://10.18.122.174:8080/dislike",
 		{
 			method: 'PUT',
 			headers: {'Content-Type': 'text/plain'},

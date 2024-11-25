@@ -1,4 +1,4 @@
-package com.example.social.messaging.dto;
+package com.example.social.Messaging.dto;
 
 public class MessageNotification
 {

@@ -77,13 +77,14 @@ public class HomeController
 		{
 			ViewPost viewPost = new ViewPost( post );
 
-			if(current_user.authorsPost( post ))
+			if(current_user.likedThisPost( post ))
 			{
 				viewPost.setLiked(true);
 			}
 			
 			model.addAttribute("principal", principal);
 			model.addAttribute("viewPost", viewPost);
+			model.addAttribute("isMyPost", post.isAuthoredBy(current_user));
 			return "post";
 		}
 		else
@@ -91,7 +92,5 @@ public class HomeController
 			return "redirect:/error";
 		}
 	}
-	
-
 }
 

@@ -7,9 +7,11 @@ import java.util.List;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
@@ -21,7 +23,8 @@ public class Post
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	private long id;
 	private String title;
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "author_id")
 	private User author;
 	private Date time;
 	@Column(columnDefinition="TEXT")
@@ -32,8 +35,12 @@ public class Post
 	    )
 	private List<Comment> comments;
 	private int numOfLikes;
-	@OneToOne
+	@OneToOne(
+	        cascade = CascadeType.ALL,
+	        orphanRemoval = true
+	    )
 	public Media media;
+	
 	
 	
 	
@@ -42,6 +49,14 @@ public class Post
 		this.comments = new ArrayList<>();
 		this.media = new Media();
 	}
+	
+
+	
+	public boolean isAuthoredBy( User user )
+	{
+		return this.author.equals(user);
+	}
+	
 	
 	
 	public long getId() {

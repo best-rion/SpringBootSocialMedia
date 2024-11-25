@@ -1,13 +1,12 @@
-package com.example.social.messaging.rest;
-
+package com.example.social.Messaging.rest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.social.messaging.model.Message;
-import com.example.social.messaging.repository.MessageRepository;
+import com.example.social.Messaging.model.Message;
+import com.example.social.Messaging.repository.MessageRepository;
 
 @RestController
 public class SeenController {

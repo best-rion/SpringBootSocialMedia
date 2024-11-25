@@ -36,7 +36,7 @@ public class PostService
 		{
 			ViewPost viewPost = new ViewPost( post );
 			
-			if(current_user.authorsPost( post ))
+			if(current_user.likedThisPost( post ))
 			{
 				viewPost.setLiked(true);
 			}
@@ -74,7 +74,7 @@ public class PostService
 		{
 			ViewPost viewPost = new ViewPost( post );
 			
-			if(current_user.authorsPost( post ))
+			if(current_user.likedThisPost( post ))
 			{
 				viewPost.setLiked(true);
 			}

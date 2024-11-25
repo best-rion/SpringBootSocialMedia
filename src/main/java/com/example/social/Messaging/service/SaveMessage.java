@@ -1,12 +1,12 @@
-package com.example.social.messaging.service;
+package com.example.social.Messaging.service;
 
 import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.example.social.messaging.model.Message;
-import com.example.social.messaging.repository.MessageRepository;
+import com.example.social.Messaging.model.Message;
+import com.example.social.Messaging.repository.MessageRepository;
 
 
 @Service

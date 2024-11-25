@@ -1,4 +1,4 @@
-package com.example.social.messaging.ws;
+package com.example.social.Messaging.ws;
 
 import java.security.Principal;
 
@@ -10,9 +10,9 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.util.HtmlUtils;
 
-import com.example.social.messaging.model.Message;
-import com.example.social.messaging.repository.MessageRepository;
-import com.example.social.messaging.service.SaveMessage;
+import com.example.social.Messaging.model.Message;
+import com.example.social.Messaging.repository.MessageRepository;
+import com.example.social.Messaging.service.SaveMessage;
 
 
 @Controller
@@ -26,6 +26,7 @@ public class MessageController
 	
 	@Autowired
 	private SimpMessagingTemplate simpMessagingTemplate;
+
 	
 	@MessageMapping("/send-to/{receiver}")
 	public void messaging(

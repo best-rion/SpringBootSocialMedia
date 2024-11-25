@@ -1,4 +1,4 @@
-package com.example.social.messaging.ws;
+package com.example.social.Messaging.ws;
 
 public class ReceivedMessage 
 {

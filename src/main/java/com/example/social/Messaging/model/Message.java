@@ -1,4 +1,4 @@
-package com.example.social.messaging.model;
+package com.example.social.Messaging.model;
 
 
 import java.util.Date;
