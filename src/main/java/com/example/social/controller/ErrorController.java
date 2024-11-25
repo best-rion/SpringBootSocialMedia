@@ -9,6 +9,6 @@ public class ErrorController
 	@GetMapping("/error")
 	public String handleError()
 	{
-		return "error";
+		return "error/error";
 	}
 }

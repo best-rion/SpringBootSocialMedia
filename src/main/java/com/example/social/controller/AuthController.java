@@ -22,7 +22,7 @@ public class AuthController
 	@GetMapping("/login")
 	public String loginGet()
 	{
-		return "login";
+		return "auth/login";
 	}
 	
 	
@@ -30,7 +30,7 @@ public class AuthController
 	public String signupGet(Model model)
 	{
 		model.addAttribute("SignupForm", new SignupForm());
-		return "signup";
+		return "auth/signup";
 	}
 	
 	
@@ -40,7 +40,7 @@ public class AuthController
 		if (userRepository.checkIfUsernameExists(form.getUsername()) != 0)
 		{
 			model.addAttribute("usernameAlreadyExists", true);
-			return "signup";
+			return "auth/signup";
 		}
 		userRepository.save(new User(form));
 		return "redirect:/login";
