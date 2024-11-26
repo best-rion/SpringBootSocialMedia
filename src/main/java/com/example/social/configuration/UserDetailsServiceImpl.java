@@ -6,7 +6,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import com.example.social.repository.UserRepository;
+import com.example.social.Social.repository.UserRepository;
 
 
 @Service

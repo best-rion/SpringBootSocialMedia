@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" th:href="@{/css/main.css}">
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@stomp/stompjs@7.0.0/bundles/stomp.umd.min.js"></script>
+    <title>tic-tac-toe</title>
+	
+	<style>
+		.button
+		{
+			background-color: #4b7b99;
+			margin: 5px;
+			padding: 5px 10px;
+			border: none;
+			border-radius: 5px;
+			font-weight: bold;
+			color: #fff;
+		}
+	</style>
+</head>
+<body>
+	<div id="connect" style="width: 100px; text-align: center; background-color: #BFECFF;">Connnecting...</div>
+	
+	<h2>Username: <span style="color: #0f77aa;" th:text="${principal}"></span> </h2>
+	<h3>Opponent: <span style="color: #0faa77;" th:text="${opponent}"></span> 💬 <span id="message"></span></h3>
+	<h4><span style="color: #ce81f7;"  id="turn"></span></h4>
+	
+	
+	<div id="options">
+		<p id="wins"></p>
+		<button id="reset" class="button">Play Again</button>
+	</div>
+	<a th:href="@{/dashboard}"><button class="button">Quit</button></a>
+	
+    <div id="container"></div>
+	
+	<input type="text" th:value="${principal}" id="principal" hidden>
+
+<script>
+
+	var count = 0;
+	var gameOn = true;
+	var iAmReadyToReset = false
+	var opponentIsReadyToReset = false
+	var myTurn;
+	var mySymbol;
+	
+	
+	const stompClient = new StompJs.Client({
+	    brokerURL: 'ws://10.18.122.174:8080/gs-guide-websocket'
+	});
+	
+
+    var cells = new Array()
+    var container = document.getElementById("container")
+	window.onload = () =>
+	{
+		$("#options").hide()
+
+		stompClient.activate();
+		
+		for (var y=0; y<3; y++)
+		{
+			var row = new Array()
+           	for (var x=0; x<3; x++)
+           	{
+               	var cell = document.createElement("button")
+               	cell.setAttribute("class", "cell")
+               	cell.setAttribute("onclick", "makeMove("+x+","+y+")")
+               	cell.style.left = (50*x)+"px"
+               	cell.style.top = (50*y)+"px"
+               	container.appendChild(cell)
+				row.push(cell)
+           	}
+			cells.push(row)
+       	}
+	}
+	
+	
+	function reset()
+	{
+		$("#options").hide()
+		
+		for (var y=0; y<3; y++)
+        {
+            for (var x=0; x<3; x++)
+            {
+                cells[y][x].innerHTML="";
+            }
+        }
+		
+		gameOn=true
+		
+		iAmReadyToReset = false
+		opponentIsReadyToReset = 
+		count=0
+	}
+
+   
+
+	function makeMove(x,y)
+	{
+		if (myTurn && gameOn && cells[y][x].innerHTML==="")
+		{
+			stompClient.publish
+			(
+				{
+			    	destination: "/app/makeMove",
+			    	body: JSON.stringify({ 'x': x, 'y': y, 'symbol':mySymbol})
+				}
+			);
+		}
+	}
+	
+	var winScenarios =
+	[
+		[ [0,0],[0,1],[0,2] ],
+		[ [1,0],[1,1],[1,2] ],
+		[ [2,0],[2,1],[2,2] ],
+		
+		[ [0,0],[1,0],[2,0] ],
+		[ [0,1],[1,1],[2,1] ],
+		[ [0,2],[1,2],[2,2] ],
+		
+		[ [0,0],[1,1],[2,2] ],
+		[ [2,0],[1,1],[0,2] ]
+	]
+	
+	function checkWinScenarios()
+	{
+		for (var i=0; i<8; i++)
+		{
+			if(
+				(
+				cells[ winScenarios[i][0][1] ][ winScenarios[i][0][0] ].innerHTML
+				== 
+				cells[ winScenarios[i][1][1] ][ winScenarios[i][1][0] ].innerHTML
+			   	)
+				&&
+				(
+				cells[ winScenarios[i][0][1] ][ winScenarios[i][0][0] ].innerHTML 
+				== 
+				cells[ winScenarios[i][2][1] ][ winScenarios[i][2][0] ].innerHTML 
+			   	)
+				&&
+				(
+				cells[ winScenarios[i][0][1] ][ winScenarios[i][0][0] ].innerHTML != ""
+				)
+			  )
+			  {
+				if (cells[ winScenarios[i][0][1] ][ winScenarios[i][0][0] ].innerHTML == mySymbol)
+				{
+					$("#wins").html("You Won")
+				}
+				else
+				{
+					$("#wins").html("Opponent Won")
+				}
+
+				gameOn = false;
+				
+				$("#options").show()
+			  }
+		}
+	}
+    function updateBoard(move)
+    {
+        var x = parseInt(move.x)
+        var y = parseInt(move.y)
+        cells[y][x].innerHTML = move.symbol
+		
+		checkWinScenarios()
+		count++;
+		if (count==9)
+		{
+			$("#wins").html("Draw")
+			gameOn = false;
+			$("#options").show()
+		}
+    }
+
+
+    stompClient.onConnect = (frame) => 
+	{
+		stompClient.publish
+		({
+		    destination: "/app/enterPlay",
+		    body: JSON.stringify({'username':$("#principal").val()})
+		})
+
+		console.log('Connected: ' + frame);
+
+		$("#connect").html("connected")
+	
+		$("#message").html( " (Waiting)" )
+		
+        stompClient.subscribe('/user/queue/move', (move) =>
+		{
+            console.log(move.headers["message-id"])
+            updateBoard(JSON.parse(move.body));
+			
+			if (myTurn)
+			{
+				myTurn = false;
+				$("#turn").html( "Opponent's Turn" )
+			}
+			else
+			{
+				myTurn = true;
+				$("#turn").html( "Your Turn ("+mySymbol+")" )
+			}
+			
+			$("#message").html( "" )
+        })
+		
+		stompClient.subscribe('/user/queue/opponentMessage', (message) =>
+		{
+            console.log(message.headers["message-id"])
+			
+            $("#message").html( " ("+JSON.parse(message.body).content+")" )
+			
+			if (JSON.parse(message.body).content === "Let's go")
+			{
+				myTurn=true
+				mySymbol='O'
+				$("#turn").html( "Your Turn ( O )" )
+				gameOn=true
+				$("#reset").show()
+			}
+			
+			if (JSON.parse(message.body).content === "Ready")
+			{
+				myTurn=false
+				mySymbol='X'
+				$("#turn").html( "Opponent's Turn" )
+			}
+			
+			if (JSON.parse(message.body).content === 'Play Again')
+			{
+				opponentIsReadyToReset = true
+				
+				if (iAmReadyToReset)
+				{
+					reset()
+				}
+			}
+			
+			if (JSON.parse(message.body).content === 'Quitted')
+			{
+				$("#reset").hide()
+				reset()
+				gameOn=false
+			}
+        })
+    }
+	
+	window.onbeforeunload = function () {
+
+		stompClient.publish
+		({
+		    destination: "/app/leavePlay",
+		    body: JSON.stringify({'username':$("#principal").val()})
+		})
+		
+		stompClient.deactivate();
+	}
+	
+	stompClient.onWebSocketError = (error) => {
+	    console.error('Error with websocket', error)
+	}
+
+	stompClient.onStompError = (frame) => {
+	    console.error('Broker reported error: ' + frame.headers['message'])
+	    console.error('Additional details: ' + frame.body)
+	}
+	
+	$(function ()
+	{
+	    $( "#reset" ).click(() =>
+		{
+			iAmReadyToReset = true;
+			
+			stompClient.publish({
+			    destination: "/app/letsPlayAgain",
+			    body: JSON.stringify({'username':$("#principal").val()})
+			});
+			
+			if (opponentIsReadyToReset)
+			{
+				reset();
+			}
+			else
+			{
+				$("#message").html( " (Waiting)" )
+			}
+		})
+	})
+	
+</script>
+</body>
+</html>

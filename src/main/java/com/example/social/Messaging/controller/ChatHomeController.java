@@ -15,8 +15,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import com.example.social.Messaging.dto.MessageNotification;
 import com.example.social.Messaging.model.Message;
 import com.example.social.Messaging.repository.MessageRepository;
-import com.example.social.model.User;
-import com.example.social.repository.UserRepository;
+import com.example.social.Social.model.User;
+import com.example.social.Social.repository.UserRepository;
 
 @Controller
 public class ChatHomeController {
