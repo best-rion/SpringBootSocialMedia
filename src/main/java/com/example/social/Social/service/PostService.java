@@ -30,6 +30,8 @@ public class PostService
 			posts.addAll(friend.posts);
 		}
 		
+		posts.addAll(current_user.posts);
+		
 		List<ViewPost> viewPosts = new ArrayList<>();
 		
 		for (Post post: posts)

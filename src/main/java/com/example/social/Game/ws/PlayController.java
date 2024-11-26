@@ -13,8 +13,9 @@ import com.example.social.Game.dto.Message;
 import com.example.social.Game.dto.Move;
 import com.example.social.Game.util.UsersList;
 
+
 @Controller
-public class MoveController
+public class PlayController
 {
 	@Autowired
 	private SimpMessagingTemplate messagingTemplate;
@@ -54,7 +55,7 @@ public class MoveController
 	{
 		String opponentUsername = UsersList.opponents.get(principal.getName());
 
-		if (UsersList.opponents.get(opponentUsername).equals(principal.getName()))
+		if (principal.getName().equals(UsersList.opponents.get(opponentUsername)))
 		{
 			messagingTemplate.convertAndSendToUser( opponentUsername,"/queue/opponentMessage", new Message("Let's go") );
 			messagingTemplate.convertAndSendToUser( principal.getName(),"/queue/opponentMessage", new Message("Ready") );
@@ -84,12 +85,14 @@ public class MoveController
 	{
 		String opponentUsername = UsersList.opponents.get(principal.getName());
 		
-		if ( UsersList.opponents.get(opponentUsername).equals(principal.getName()) )
+		if ( principal.getName().equals(UsersList.opponents.get(opponentUsername)) )
 		{
 			messagingTemplate.convertAndSendToUser( opponentUsername, "/queue/opponentMessage", new Message("Quitted"));
 		}
 		else {
-			UsersList.opponents.get(opponentUsername).equals(principal.getName());
+
+			messagingTemplate.convertAndSendToUser( opponentUsername,  "/queue/unchallenge", principal.getName() );
+			System.out.println("sjfsjdfksjdflk-----------------------------------------");
 		}
 		
 		UsersList.opponents.remove(principal.getName());
