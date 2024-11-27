@@ -1,6 +1,7 @@
 package com.example.social.Social.repository;
 
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
@@ -19,4 +20,7 @@ public interface UserRepository extends CrudRepository<User,Integer>
 	
 	@Query(value = "SELECT * FROM user WHERE username <> :username", nativeQuery = true)
 	List<User> findAllExcept(String username);
+	
+	@Query(value = "SELECT * FROM user WHERE username IN :set", nativeQuery = true)
+	Set<User> findAllInSet(Set<String> set);
 }

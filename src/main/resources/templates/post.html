@@ -58,7 +58,7 @@
 							 <span class="author-name" th:text="${viewPost.post.author.name}"></span> 
 						 </a>				
 						 		
-						 <button th:if="${isMyPost}"  th:onclick="'deletePost('+ ${viewPost.post.id} +')'" class="view-post vertical-center">
+						 <button th:if="${isMyPost}"  th:onclick="'deletePost('+ ${viewPost.post.id} +')'" class="btn btn-light view-post vertical-center">
  							Delete
  						 </button>
 

@@ -19,11 +19,6 @@
 			background-color: rgb(255, 254, 223);
 		}
 		
-		#friend-name
-		{
-			margin: auto 0px;
-		}
-		
 		#conversation
 		{
 			margin-top: 10px;
@@ -95,12 +90,28 @@
 			background-color: rgb(201, 232, 247);
 			padding: 10px 10px 20px 10px;
 		}
+		.profile-picture
+		{
+			height: 40px;
+			width: 40px;
+			border-radius: 50%;
+			margin: auto 0px;
+		}
+		.user-name
+		{
+			font-weight: bold;
+		}
+		a
+		{
+			text-decoration: none;
+		}
 		
 	</style>
 	
 	
 </head>
 <body>
+
 	<noscript>
 		<h2 style="color: #ff0000">
 			Seems your browser doesn't support Javascript!
@@ -109,13 +120,20 @@
 	
 	<div class="container bg-white">
 
-		<div id="friend-name-div" class="sticky-top"><h2 id="friend-name" th:text="${friend}"></h2></div>
+		<div id="friend-name-div" class="sticky-top">
+			<a class="d-flex message-text" th:href="@{/profile/}+${friend.username}">
+				<img class="profile-picture" th:src="${friend.image_suffix != null}
+																 ? @{/upload/static/images/}+${friend.id}+'.'+${friend.image_suffix}
+																 : @{/images/default.jpg}" alt="...">
+				<span class="user-name ms-1 my-auto" th:text="${friend.name}"></span>
+			</a>
+		</div>
 		
         <div id="conversation">
 
 			<div class="message-div" th:each="message: ${messages}">
 				
-				<div th:unless="${message.sender}==${principal}" class="message-box left">
+				<div th:unless="${message.sender}==${principal.name}" class="message-box left">
 					<div class="message-box-inner left inner-left">
 						<p class="message-text" th:text="${message.content}"></p>
 						<div class="date-div">
@@ -124,7 +142,7 @@
 					</div>
 				</div>
 				
-				<div th:if="${message.sender}==${principal}" class="message-box right">
+				<div th:if="${message.sender}==${principal.name}" class="message-box right">
 					<div class="message-box-inner right inner-right">
 						<p class="message-text" th:text="${message.content}"></p>
 						<div class="date-div">
@@ -145,7 +163,7 @@
 				<div class="flex-grow-0 py-3 px-4 border-top">
 					<div class="input-group">
 						
-						<input th:value="${principal}" type="text" id="principal" hidden>
+						<input th:value="${principal.name}" type="text" id="principal" hidden>
 						<input th:value="${friend}" type="text" id="friend" hidden>
 
 						<input type="text" id="message" class="form-control" placeholder="Type your message">

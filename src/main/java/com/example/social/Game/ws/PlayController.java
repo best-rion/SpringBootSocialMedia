@@ -1,6 +1,7 @@
 package com.example.social.Game.ws;
 
 import java.security.Principal;
+import java.util.HashSet;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,9 +10,12 @@ import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 
+import com.example.social.Game.dto.ActiveUser;
 import com.example.social.Game.dto.Message;
 import com.example.social.Game.dto.Move;
 import com.example.social.Game.util.UsersList;
+import com.example.social.Social.model.User;
+import com.example.social.Social.repository.UserRepository;
 
 
 @Controller
@@ -20,22 +24,40 @@ public class PlayController
 	@Autowired
 	private SimpMessagingTemplate messagingTemplate;
 	
+	@Autowired
+	UserRepository userRepository;
+	
 	@MessageMapping(value="/enterDashboard")
 	@SendTo("/topic/updateUsers")
-	public  Set<String> dashboardActive(Principal principal)
+	public Set<ActiveUser> dashboardActive(Principal principal)
 	{
 		UsersList.activeUsers.add(principal.getName());
-		Set<String> activeUsers = UsersList.activeUsers;
+		Set<String> usersName = UsersList.activeUsers;
+		Set<User> users = userRepository.findAllInSet(usersName);
+		
+		Set<ActiveUser> activeUsers = new HashSet<>();
+		
+		for (User user: users)
+		{
+			activeUsers.add( new ActiveUser(user));
+		}
+		
 		return activeUsers;
 	}
 	
 	
 	@MessageMapping(value="/leaveDashboard")
 	@SendTo("/topic/updateUsers")
-	public Set<String> dashboardLeave(Principal principal)
+	public Set<ActiveUser> dashboardLeave(Principal principal)
 	{
 		UsersList.activeUsers.remove(principal.getName());
-		Set<String> activeUsers = UsersList.activeUsers;
+		Set<String> usersName = UsersList.activeUsers;
+		Set<User> users = userRepository.findAllInSet(usersName);
+		Set<ActiveUser> activeUsers = new HashSet<>();
+		for (User user: users)
+		{
+			activeUsers.add( new ActiveUser(user));
+		}
 		return activeUsers;
 	}
 
@@ -62,7 +84,8 @@ public class PlayController
 		}
 		else
 		{
-			messagingTemplate.convertAndSendToUser( opponentUsername  ,"/queue/challenge", principal.getName() );
+			User user = userRepository.findByUsername(principal.getName());
+			messagingTemplate.convertAndSendToUser( opponentUsername  ,"/queue/challenge", new ActiveUser( user ) );
 		}
 		
 		
@@ -92,7 +115,6 @@ public class PlayController
 		else {
 
 			messagingTemplate.convertAndSendToUser( opponentUsername,  "/queue/unchallenge", principal.getName() );
-			System.out.println("sjfsjdfksjdflk-----------------------------------------");
 		}
 		
 		UsersList.opponents.remove(principal.getName());

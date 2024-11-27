@@ -4,7 +4,37 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<link rel="stylesheet" th:href="@{/css/nav.css}">
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <title>Edit Profile</title>
+	
+	<style>
+
+			body
+			{
+				width: 100%;
+				height: 100vh;
+			}
+			
+			#name, #description
+			{
+				width: 600px;
+			}
+			
+			.button
+			{
+				padding: 10px 25px;
+		         margin: 10px auto;
+				background-color: rgb(26, 91, 165);
+				color: white;
+			}
+			
+			a
+			{
+				text-decoration: none !important;
+			}
+
+		</style>
+	
 </head>
 <body>
     <nav>
@@ -17,18 +47,18 @@
 	</nav>
 
     <div class="container">
+		
+		<h2 class="mb-5"><u>Edit Profile Info</u></h2>
+		
         <form th:action="@{/account}" th:object="${form}" method="post" enctype="multipart/form-data">
-            <p>
-                Image: <input type="file" name="image">
-            </p>
+			<label>Image</label><br>
+			<input type="file" name="image" id="image" multiple="multiple"><br><br>
+			
+			<label>Name</label><br>
+			<input type="text" name="name" id="name" th:value="${current_user.name}"><br><br>
 
-            <p>
-                <input type="text" name="name" th:value="${current_user.name}">
-            </p>
-
-            <p>
-                <input type="text" name="description" th:value="${current_user.description}">
-            </p>
+			<label>Description</label><br>
+			<input type="text" name="description" id="description" th:value="${current_user.description}"><br><br>
 
             <button class="button" type="submit">Done</button>
         </form>
