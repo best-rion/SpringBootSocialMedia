@@ -33,7 +33,7 @@ public class MessageController
 			@DestinationVariable String friend,
 			final Principal principal
 			) throws Exception
-	{	
+	{
 		Message message = saveMessage.save( principal.getName(), friend, receivedMessage );
 	
 		simpMessagingTemplate.convertAndSendToUser( friend , "/queue/private", message);

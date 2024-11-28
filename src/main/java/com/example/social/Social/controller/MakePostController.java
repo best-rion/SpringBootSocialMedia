@@ -52,15 +52,14 @@ public class MakePostController
 	
 	
 	@PostMapping("/makePost")
-	public String postPost(@ModelAttribute Post post, Principal principal, @RequestParam("video_file") MultipartFile file) throws IOException
+	public String postPost(@ModelAttribute Post post, Principal principal, @RequestParam("file") MultipartFile file) throws IOException
 	{
 		User author = userRepository.findByUsername(principal.getName());
-
 		
 		post.setAuthor(author);
 		post.setTime(new Date());
 		
-		String fileName[];
+		String[] fileName;
 		String suffix = "";
 		
 		if ( !file.isEmpty() )

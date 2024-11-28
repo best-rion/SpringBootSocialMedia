@@ -60,26 +60,28 @@ public class ChatHomeController {
 		return "messaging/home";
 	}
 	
-	@GetMapping("/messaging/chat/{friend}")
-	public String chat(Model model, @PathVariable String friend, Principal principal)
+	@GetMapping("/messaging/chat/{friend_username}")
+	public String chat(Model model, @PathVariable String friend_username, Principal principal)
 	{
-		List<Message> unseenMessages = messageRepository.unseenMessageBySender(principal.getName(), friend);
+		List<Message> unseenMessages = messageRepository.unseenMessageBySender(principal.getName(), friend_username);
 
-		User user = userRepository.findByUsername(friend);
+		User friend = userRepository.findByUsername(friend_username);
 
 		for (Message message: unseenMessages)
 		{
 			message.setSeen(true);
 			messageRepository.save(message);
 		}
-		simpMessagingTemplate.convertAndSendToUser( friend , "/queue/update", principal.getName());
+		simpMessagingTemplate.convertAndSendToUser( friend_username , "/queue/update", principal.getName());
 
 		// LIST OF ALL MESSAGES, MINE AND MY FRIEND'S
-		List<Message> messages = messageRepository.findByPeople(principal.getName(), friend);
+		List<Message> messages = messageRepository.findByPeople(principal.getName(), friend_username);
+
+		System.out.println();
 		
 		model.addAttribute("messages", messages);
 		model.addAttribute("principal", principal);
-		model.addAttribute("friend", user);
+		model.addAttribute("friend", friend);
 		return "messaging/chat";
 	}
 }

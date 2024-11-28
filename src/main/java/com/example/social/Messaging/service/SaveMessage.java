@@ -16,7 +16,7 @@ public class SaveMessage
 	MessageRepository messageRepository;
 	
 	public Message save(String sender, String receiver, String content)
-	{
+	{	System.out.println("f");
 		Message newMessage = new Message();
 		
 		newMessage.setSender(sender);

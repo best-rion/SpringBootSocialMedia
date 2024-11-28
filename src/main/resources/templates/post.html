@@ -55,7 +55,7 @@
 							<img class="profile-picture" th:src="${viewPost.post.author.image_suffix != null} 
 																 ? @{/upload/static/images/}+${viewPost.post.author.id}+'.'+${viewPost.post.author.image_suffix} 
 																 : @{/images/default.jpg}" alt="...">
-							 <span class="author-name" th:text="${viewPost.post.author.name}"></span> 
+							 <span class="user-name" th:text="${viewPost.post.author.name}"></span>
 						 </a>				
 						 		
 						 <button th:if="${isMyPost}"  th:onclick="'deletePost('+ ${viewPost.post.id} +')'" class="btn btn-light view-post vertical-center">
@@ -105,7 +105,7 @@
 									<img class="profile-picture" th:src="${comment.author.image_suffix != null} 
 																		 ? @{/upload/static/images/}+${comment.author.id}+'.'+${comment.author.image_suffix} 
 																		 : @{/images/default.jpg}" alt="...">
-									 <span class="author-name" th:text="${comment.author.name}"></span>
+									 <span class="user-name" th:text="${comment.author.name}"></span>
 								</a>  
 								
 								<p class="content vertical-center" th:text="${comment.content}"></p>

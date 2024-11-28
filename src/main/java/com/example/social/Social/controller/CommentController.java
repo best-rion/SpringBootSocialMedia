@@ -50,7 +50,7 @@ public class CommentController
 		{
 			url += "/"+u;
 		}
-		if(url.equals("/null"))
+		if(url.equals("/home "))
 			url = "/";
 		
 		System.out.println(url);
