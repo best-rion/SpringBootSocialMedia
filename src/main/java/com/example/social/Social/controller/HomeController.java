@@ -9,7 +9,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
-import com.example.social.Social.dto.CommentForm;
 import com.example.social.Social.dto.ViewPost;
 import com.example.social.Social.dto.Profile;
 import com.example.social.Social.model.Post;
@@ -37,8 +36,7 @@ public class HomeController
 		User current_user = userRepository.findByUsername(principal.getName());
 		
 		List<ViewPost> viewPosts = postService.postsForHome(current_user);
-		
-		model.addAttribute("commentForm", new CommentForm());
+	
 		model.addAttribute("viewPosts", viewPosts);
 		model.addAttribute("principal", principal);
 		return "home";

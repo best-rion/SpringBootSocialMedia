@@ -1,4 +1,4 @@
-package com.example.social.Social.controller;
+package com.example.social.Social.rest;
 
 import java.security.Principal;
 import java.util.Set;
