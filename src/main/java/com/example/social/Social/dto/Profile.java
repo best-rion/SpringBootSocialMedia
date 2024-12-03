@@ -8,7 +8,7 @@ public class Profile
 	private String name;
 	private String username;
 	private String description;
-	private String image_suffix;
+	private String src;
 	
 	public Profile() {}
 	
@@ -18,7 +18,7 @@ public class Profile
 		this.name = user.getName();
 		this.username = user.getUsername();
 		this.description = user.getDescription();
-		this.image_suffix = user.getImage_suffix();
+		this.src = user.getSrc();
 	}
 
 	public long getId() {
@@ -53,11 +53,11 @@ public class Profile
 		this.description = description;
 	}
 
-	public String getImage_suffix() {
-		return image_suffix;
+	public String getSrc() {
+		return src;
 	}
 
-	public void setImage_suffix(String image_suffix) {
-		this.image_suffix = image_suffix;
+	public void setSrc(String src) {
+		this.src = src;
 	}
 }

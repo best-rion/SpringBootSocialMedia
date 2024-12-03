@@ -66,9 +66,7 @@
 					<div class="upper">
 									
 						<a class="vertical-center" th:href="@{/profile/}+${viewPost.post.author.username}">
-							<img class="profile-picture" th:src="${viewPost.post.author.image_suffix != null} 
-																 ? @{/upload/static/images/}+${viewPost.post.author.id}+'.'+${viewPost.post.author.image_suffix} 
-																 : @{/images/default.jpg}" alt="...">
+							<img class="profile-picture" th:src="${viewPost.post.author.src}" alt="...">
 							 <span class="user-name" th:text="${viewPost.post.author.name}"></span>
 						 </a>
 
@@ -183,22 +181,10 @@
 				{
 					JSON.parse(body).forEach(comment => {
 
-						console.log(comment)
-						
-						var src;
-						if(comment.author.image_suffix == null)
-						{
-							src = "/images/default.jpg"
-						}
-						else
-						{
-							src = "/upload/static/images/"+comment.author.id+"."+comment.author.image_suffix
-						}
-
 						$("#comments").append(
 							"<div class=\"comment\">"+
 								"<a class=\"vertical-center\" href=\"/profile/"+ comment.author.username +"\">"+
-									"<img class=\"profile-picture\" src=\""+ src +"\" alt=\"...\">"+
+									"<img class=\"profile-picture\" src=\""+ comment.author.src +"\" alt=\"...\">"+
 									"<span class=\"user-name\">"+ comment.author.name +"</span>"+
 								"</a>"+  
 								
@@ -225,20 +211,10 @@
 				{
 					var comment = JSON.parse(body);
 
-					var src;
-					if(comment.author.image_suffix == null)
-					{
-						src = "/images/default.jpg"
-					}
-					else
-					{
-						src = "/upload/static/images/"+comment.author.id+"."+comment.author.image_suffix
-					}
-
 					$("#comments").append(
 						"<div class=\"comment\">"+
 							"<a class=\"vertical-center\" href=\"/profile/"+ comment.author.username +"\">"+
-								"<img class=\"profile-picture\" src=\""+ src +"\" alt=\"...\">"+
+								"<img class=\"profile-picture\" src=\""+ comment.author.src +"\" alt=\"...\">"+
 								"<span class=\"user-name\">"+ comment.author.name +"</span>"+
 							"</a>"+  
 							

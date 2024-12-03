@@ -21,6 +21,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.Transient;
 import jakarta.persistence.JoinColumn;
 
 @Entity
@@ -39,6 +40,8 @@ public class User implements UserDetails
 	private String password;
 	private String description;
 	private String image_suffix;
+	@Transient
+	private String src;
 
 	@OneToMany(
 	        mappedBy = "author",
@@ -78,7 +81,19 @@ public class User implements UserDetails
 		return likedPosts.contains(post);
 	}
 	
-	
+
+
+	public String getSrc()
+	{
+		if (image_suffix != null)
+		{
+			return String.format("/upload/static/images/%d.%s", id, image_suffix);
+		}
+		else
+		{
+			return  "/images/default.jpg";
+		}
+	}
 	public long getId() {
 		return id;
 	}

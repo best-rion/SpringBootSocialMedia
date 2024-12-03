@@ -14,14 +14,7 @@ public class ActiveUser
 	{
 		this.name = user.getName();
 		this.username = user.getUsername();
-		if (user.getImage_suffix() != null)
-		{
-			this.src = String.format("/upload/static/images/%d.%s", user.getId(), user.getImage_suffix());
-		}
-		else
-		{
-			this.src = "/images/default.jpg";
-		}
+		this.src = user.getSrc();
 	}
 	
 	
