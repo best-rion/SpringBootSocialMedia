@@ -92,7 +92,7 @@ function showMessage(message)
 		{
 			// Has it been seen???
 			var status = "Unseen"
-			if (message.seen)
+			if (message.seen==1)
 			{
 				status = "Seen"
 			}

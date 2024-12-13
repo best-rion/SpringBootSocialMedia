@@ -18,7 +18,7 @@ public class SeenController {
 	public String seen(@RequestBody String id)
 	{	
 		Message message = messageRepository.findById(Integer.parseInt(id));
-		message.setSeen(true);
+		message.setSeen(1);
 		messageRepository.save(message);
 		
 		return "1";

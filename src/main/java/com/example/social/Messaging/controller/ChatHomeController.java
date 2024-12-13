@@ -69,7 +69,7 @@ public class ChatHomeController {
 
 		for (Message message: unseenMessages)
 		{
-			message.setSeen(true);
+			message.setSeen(1);
 			messageRepository.save(message);
 		}
 		simpMessagingTemplate.convertAndSendToUser( friend_username , "/queue/update", principal.getName());

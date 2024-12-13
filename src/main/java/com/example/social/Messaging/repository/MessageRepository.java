@@ -16,10 +16,10 @@ public interface MessageRepository extends CrudRepository<Message, Integer>
 			+ " OR (sender = :person2 AND receiver = :person1)", nativeQuery = true)
 	List<Message> findByPeople(String person1, String person2);
 	
-	@Query(value = "SELECT COUNT(*) FROM message WHERE sender = :sender AND receiver = :me AND seen=false", nativeQuery = true)
+	@Query(value = "SELECT COUNT(*) FROM message WHERE sender = :sender AND receiver = :me AND seen=0", nativeQuery = true)
 	int numOfUnseenMessageBySender(String me, String sender);
 	
-	@Query(value = "SELECT * FROM message WHERE sender = :sender AND receiver = :me AND seen=false", nativeQuery = true)
+	@Query(value = "SELECT * FROM message WHERE sender = :sender AND receiver = :me AND seen=0", nativeQuery = true)
 	List<Message> unseenMessageBySender(String me, String sender);
 
 	@Query(value = "SELECT receiver FROM message WHERE sender = :me UNION SELECT sender FROM message WHERE receiver = :me", nativeQuery = true)

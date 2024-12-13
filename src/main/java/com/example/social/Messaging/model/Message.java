@@ -28,7 +28,7 @@ public class Message
 	
 	private String sender;
 	private String receiver;
-	private boolean seen;
+	private int seen;
 
 	
 	public int getId()
@@ -74,11 +74,11 @@ public class Message
 		this.receiver = receiver;
 	}
 
-	public boolean isSeen() {
+	public int getSeen() {
 		return seen;
 	}
 
-	public void setSeen(boolean seen) {
+	public void setSeen(int seen) {
 		this.seen = seen;
 	}
 }
