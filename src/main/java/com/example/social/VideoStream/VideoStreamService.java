@@ -18,9 +18,7 @@ import static com.example.social.VideoStream.ApplicationConstants.*;
 @Service
 public class VideoStreamService {
 	
-
-	@Value("${videos.dir}")
-    private String VIDEO_PATH;
+    private String VIDEO_PATH = System.getProperty("user.dir") + "/upload/static/videos";
 
 
     private final Logger logger = LoggerFactory.getLogger(VideoStreamService.class);

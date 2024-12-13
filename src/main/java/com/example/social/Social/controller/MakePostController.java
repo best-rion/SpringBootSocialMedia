@@ -34,12 +34,10 @@ public class MakePostController
 	
 	@Autowired
 	MediaRepository mediaRepository;
-	
-	@Value("${videos.dir}")
-	private String videosFolder;
-	
-	@Value("${photos.dir}")
-	private String photosFolder;
+
+	private String photosDir = System.getProperty("user.dir") + "/upload/static/photos";
+
+	private String videosDir = System.getProperty("user.dir") + "/upload/static/videos";
 	
 
 	@GetMapping("/makePost")
@@ -88,12 +86,12 @@ public class MakePostController
 		{
 			if( post.media.getType().equals("video") )
 			{
-				Path path = Paths.get(videosFolder, Long.toString( post.getId() ) + "." + suffix);
+				Path path = Paths.get(videosDir, Long.toString( post.getId() ) + "." + suffix);
 				Files.write( path, file.getBytes());
 			}
 			else if(  post.media.getType().equals("photo") )
 			{
-				Path path = Paths.get(photosFolder, Long.toString( post.getId() ) + "." + suffix);
+				Path path = Paths.get(photosDir, Long.toString( post.getId() ) + "." + suffix);
 				Files.write( path, file.getBytes());
 			}
 		}

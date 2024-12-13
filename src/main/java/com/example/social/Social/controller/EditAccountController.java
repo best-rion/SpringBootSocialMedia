@@ -25,9 +25,8 @@ public class EditAccountController
 {
 	@Autowired
 	UserRepository userRepository;
-	
-	@Value("${images.dir}")
-	private String imagesFolder;
+
+	private String imagesDir = System.getProperty("user.dir") + "/upload/static/images";
 	
 	@GetMapping("/account")
 	public String accountGet(Model model, Principal principal)
@@ -51,7 +50,7 @@ public class EditAccountController
 		{
 			String fileName = file.getOriginalFilename();
 			String suffix[] = fileName.split("\\.");
-			Path path = Paths.get(imagesFolder, Long.toString( current_user.getId() ) + "." + suffix[1]);
+			Path path = Paths.get(imagesDir, Long.toString( current_user.getId() ) + "." + suffix[1]);
 			Files.write( path, file.getBytes());
 			current_user.setImage_suffix( suffix[1] );
 		}
