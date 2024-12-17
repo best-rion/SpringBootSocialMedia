@@ -11,14 +11,14 @@ import org.springframework.stereotype.Controller;
 
 import com.example.social.Messaging.model.Message;
 import com.example.social.Messaging.repository.MessageRepository;
-import com.example.social.Messaging.service.SaveMessage;
+import com.example.social.Messaging.service.MessageService;
 
 
 @Controller
 public class MessageController
 {
 	@Autowired
-	SaveMessage saveMessage;
+	MessageService messageService;
 	
 	@Autowired
 	MessageRepository messageRepository;
@@ -34,7 +34,7 @@ public class MessageController
 			final Principal principal
 			) throws Exception
 	{
-		Message message = saveMessage.save( principal.getName(), friend, receivedMessage );
+		Message message = messageService.save( principal.getName(), friend, receivedMessage );
 	
 		simpMessagingTemplate.convertAndSendToUser( friend , "/queue/private", message);
 

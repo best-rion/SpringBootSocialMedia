@@ -2,12 +2,9 @@ package com.example.social.Messaging.controller;
 
 
 import java.security.Principal;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,69 +12,39 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 import com.example.social.Messaging.dto.MessageNotification;
 import com.example.social.Messaging.model.Message;
-import com.example.social.Messaging.repository.MessageRepository;
+import com.example.social.Messaging.service.MessageService;
 import com.example.social.Social.model.User;
-import com.example.social.Social.repository.UserRepository;
+import com.example.social.Social.service.UserService;
 
 @Controller
 public class ChatHomeController {
 	
 	@Autowired
-	UserRepository userRepository;
+	private UserService userService;
 	
 	@Autowired
-	MessageRepository messageRepository;
+	private MessageService messageService;
 
-	
-	@Autowired
-	private SimpMessagingTemplate simpMessagingTemplate;
 	
 	@GetMapping("/messaging")
 	public String home(Model model, Principal principal)
 	{
-		// get all the messages were i am
-
-		Set<String> peopleIHaveTalkedTo = messageRepository.findPeopleIHaveTalkedTo(principal.getName());
-
-		Set<User> senders = userRepository.findAllInSet(peopleIHaveTalkedTo);
-
-		List<MessageNotification> notifications = new ArrayList<>();
-
-		for (User sender: senders)
-		{
-			MessageNotification notification = new MessageNotification();
-			
-			notification.sender = sender;
-			notification.numberOfMessages = messageRepository.numOfUnseenMessageBySender(principal.getName(), sender.getUsername());
-			notification.lastMessage = messageRepository.lastMessage(principal.getName(), sender.getUsername());
-
-			
-			notifications.add(notification);
-		}
+		List<MessageNotification> notifications = messageService.getNotifications(principal);
 
 		model.addAttribute("notifications", notifications);
 		model.addAttribute("principal", principal);
 		return "messaging/home";
 	}
 	
+	
 	@GetMapping("/messaging/chat/{friend_username}")
 	public String chat(Model model, @PathVariable String friend_username, Principal principal)
 	{
-		List<Message> unseenMessages = messageRepository.unseenMessageBySender(principal.getName(), friend_username);
+		messageService.setMessageToSeen(friend_username, principal);
 
-		User friend = userRepository.findByUsername(friend_username);
+		List<Message> messages = messageService.getChatHistory(friend_username, principal);
 
-		for (Message message: unseenMessages)
-		{
-			message.setSeen(1);
-			messageRepository.save(message);
-		}
-		simpMessagingTemplate.convertAndSendToUser( friend_username , "/queue/update", principal.getName());
-
-		// LIST OF ALL MESSAGES, MINE AND MY FRIEND'S
-		List<Message> messages = messageRepository.findByPeople(principal.getName(), friend_username);
-
-		System.out.println();
+		User friend = userService.getByUsername(friend_username);
 		
 		model.addAttribute("messages", messages);
 		model.addAttribute("principal", principal);
