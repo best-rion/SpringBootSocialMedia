@@ -8,7 +8,6 @@ import java.security.Principal;
 import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -35,9 +34,9 @@ public class MakePostController
 	@Autowired
 	MediaRepository mediaRepository;
 
-	private String photosDir = System.getProperty("user.dir") + "/upload/static/photos";
+	private String photosDir = System.getProperty("user.dir") + "/src/main/upload/static/photos";
 
-	private String videosDir = System.getProperty("user.dir") + "/upload/static/videos";
+	private String videosDir = System.getProperty("user.dir") + "/src/main/upload/static/videos";
 	
 
 	@GetMapping("/makePost")

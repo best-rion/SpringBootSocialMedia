@@ -2,7 +2,6 @@ package com.example.social.VideoStream;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -18,7 +17,7 @@ import static com.example.social.VideoStream.ApplicationConstants.*;
 @Service
 public class VideoStreamService {
 	
-    private String VIDEO_PATH = System.getProperty("user.dir") + "/upload/static/videos";
+    private String VIDEO_PATH = System.getProperty("user.dir") + "/src/main/upload/static/videos";
 
 
     private final Logger logger = LoggerFactory.getLogger(VideoStreamService.class);

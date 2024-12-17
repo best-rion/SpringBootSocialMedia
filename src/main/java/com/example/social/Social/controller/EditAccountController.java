@@ -25,7 +25,7 @@ public class EditAccountController
 	@Autowired
 	UserRepository userRepository;
 
-	private String imagesDir = System.getProperty("user.dir") + "/upload/static/images";
+	private String imagesDir = System.getProperty("user.dir") + "/src/main/upload/static/images";
 	
 	@GetMapping("/account")
 	public String accountGet(Model model, Principal principal)

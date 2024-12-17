@@ -13,6 +13,6 @@ public class StorageConfiguration implements WebMvcConfigurer
   public void addResourceHandlers(final ResourceHandlerRegistry registry) 
   {
 	System.out.println( System.getProperty("user.dir") );
-    registry.addResourceHandler("/upload/**").addResourceLocations("file://" + System.getProperty("user.dir") + "/upload/");
+    registry.addResourceHandler("/upload/**").addResourceLocations("file://" + System.getProperty("user.dir") + "/src/main/upload/");
   }
 }
